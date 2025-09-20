@@ -38,4 +38,7 @@
 		x_pos_offset_max="2"
 		y_pos_offset_min="0"
 		y_pos_offset_max="2" />
+	<LaserEmitterComponent>
+		<laser beam_particle_type="sand" />
+	</LaserEmitterComponent>
 </Entity>

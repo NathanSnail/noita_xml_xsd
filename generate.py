@@ -299,6 +299,12 @@ def trim_end(s: str):
         s = s[:-1]
     return s
 
+# replaces int32 with std::string
+def mark_config_materials(values: list) -> list:
+    for x in values:
+        if x["type"] == "int32":
+            x["type"] = "std::string"
+    return values
 
 # configs are identical to components really, so we can just reuse component code
 configs_json = json.load(
@@ -316,7 +322,7 @@ for config in configs_json:
                 )
                 for field in config.get("members", [])
                 + config.get("privates", [])
-                + config.get("custom_data_types", [])
+                + mark_config_materials(config.get("custom_data_types", []))
                 + config.get("objects", [])
             ],
         )

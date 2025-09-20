@@ -2007,7 +2007,7 @@
 		</xsd:attribute>
 	</xsd:complexType>
 	<xsd:complexType name="ConfigLaser" mixed="true">
-		<xsd:annotation> <xsd:documentation> <![CDATA[```cpp<br>class ConfigLaser {<br>&emsp;&emsp;&emsp;&emsp;int32 max_cell_durability_to_destroy;<br>&emsp;&emsp;&emsp;&emsp;uint32 damage_to_cells;<br>&emsp;&emsp;&emsp;&emsp;float max_length;<br>&emsp;&emsp;&emsp;&emsp;float beam_radius;<br>&emsp;&emsp;&emsp;&emsp;int32 beam_particle_chance;<br>&emsp;&emsp;&emsp;&emsp;float beam_particle_fade;<br>&emsp;&emsp;&emsp;&emsp;bool beam_particle_fade_reverse;<br>&emsp;&emsp;&emsp;&emsp;int32 hit_particle_chance;<br>&emsp;&emsp;&emsp;&emsp;bool audio_enabled;<br>&emsp;&emsp;&emsp;&emsp;bool audio_hit_always_enabled;<br>&emsp;&emsp;&emsp;&emsp;float damage_to_entities;<br>&emsp;&emsp;&emsp;&emsp;bool damage_apply_hitbox_dmg_multiplier; //  NOTE( Petri ): 20.6.2023 - laser emitters have by default skipped the HitboxComponent's damage_multiplier. Added this as a way to enable that multiplier. <br>&emsp;&emsp;&emsp;&emsp;bool root_entity_is_responsible_for_damage; //  If 1, damage from laser to entities will be treated as if it was caused by the laser emitter's root entity<br>&emsp;&emsp;&emsp;&emsp;int32 beam_particle_type;<br>};<br>```]]> </xsd:documentation> </xsd:annotation>
+		<xsd:annotation> <xsd:documentation> <![CDATA[```cpp<br>class ConfigLaser {<br>&emsp;&emsp;&emsp;&emsp;int32 max_cell_durability_to_destroy;<br>&emsp;&emsp;&emsp;&emsp;uint32 damage_to_cells;<br>&emsp;&emsp;&emsp;&emsp;float max_length;<br>&emsp;&emsp;&emsp;&emsp;float beam_radius;<br>&emsp;&emsp;&emsp;&emsp;int32 beam_particle_chance;<br>&emsp;&emsp;&emsp;&emsp;float beam_particle_fade;<br>&emsp;&emsp;&emsp;&emsp;bool beam_particle_fade_reverse;<br>&emsp;&emsp;&emsp;&emsp;int32 hit_particle_chance;<br>&emsp;&emsp;&emsp;&emsp;bool audio_enabled;<br>&emsp;&emsp;&emsp;&emsp;bool audio_hit_always_enabled;<br>&emsp;&emsp;&emsp;&emsp;float damage_to_entities;<br>&emsp;&emsp;&emsp;&emsp;bool damage_apply_hitbox_dmg_multiplier; //  NOTE( Petri ): 20.6.2023 - laser emitters have by default skipped the HitboxComponent's damage_multiplier. Added this as a way to enable that multiplier. <br>&emsp;&emsp;&emsp;&emsp;bool root_entity_is_responsible_for_damage; //  If 1, damage from laser to entities will be treated as if it was caused by the laser emitter's root entity<br>&emsp;&emsp;&emsp;&emsp;std::string beam_particle_type;<br>};<br>```]]> </xsd:documentation> </xsd:annotation>
 		<xsd:attribute name="max_cell_durability_to_destroy" type="xsd:int" default="0">
 			<xsd:annotation>
 				<xsd:documentation><![CDATA[```cpp<br>int32 max_cell_durability_to_destroy;<br>```]]></xsd:documentation>
@@ -2073,9 +2073,9 @@
 				<xsd:documentation><![CDATA[```cpp<br>bool root_entity_is_responsible_for_damage; //  If 1, damage from laser to entities will be treated as if it was caused by the laser emitter's root entity<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
-		<xsd:attribute name="beam_particle_type" type="xsd:int" default="0">
+		<xsd:attribute name="beam_particle_type" type="xsd:string" default="">
 			<xsd:annotation>
-				<xsd:documentation><![CDATA[```cpp<br>int32 beam_particle_type;<br>```]]></xsd:documentation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string beam_particle_type;<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 	</xsd:complexType>
