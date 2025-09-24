@@ -15,37 +15,37 @@
 		"name": "input_cell1",
 		"type": "std::string",
 		"required": true,
-		"doc": "The first cell in the reaction"
+		"doc": "The first cell in the reaction. Can be a tag `[tag_name]` or a cell `cell_name`"
 	},
 	{
 		"name": "output_cell1",
 		"type": "std::string",
 		"required": true,
-		"doc": "The material input_cell1 is converted to"
+		"doc": "The material input_cell1 is converted to. Can be a tag `[tag_name]` or a cell `cell_name`. If this is a tag and the tag is not in the inputs a random material that has the tag will be produced."
 	},
 	{
 		"name": "input_cell2",
 		"type": "std::string",
 		"required": true,
-		"doc": "The second cell in the reaction"
+		"doc": "The second cell in the reaction. Can be a tag `[tag_name]` or a cell `cell_name`"
 	},
 	{
 		"name": "output_cell2",
 		"type": "std::string",
 		"required": true,
-		"doc": "The material input_cell2 is converted to"
+		"doc": "The material input_cell2 is converted to. Can be a tag `[tag_name]` or a cell `cell_name`. If this is a tag and the tag is not in the inputs a random material that has the tag will be produced."
 	},
 	{
 		"name": "input_cell3",
 		"type": "std::string",
 		"default": "",
-		"doc": "If this is empty its a 2 cell reaction, if it's not then it's a 3 cell reaction, and output_cell3 must be set"
+		"doc": "If this is empty its a 2 cell reaction, if it's not then it's a 3 cell reaction, and output_cell3 must be set. Can be a tag `[tag_name]` or a cell `cell_name`"
 	},
 	{
 		"name": "output_cell3",
 		"type": "std::string",
 		"default": "",
-		"doc": "If this is empty its a 2 cell reaction, if it's not then it's a 3 cell reaction, and input_cell3 must be set"
+		"doc": "If this is empty its a 2 cell reaction, if it's not then it's a 3 cell reaction, and input_cell3 must be set. Can be a tag `[tag_name]` or a cell `cell_name`. If this is a tag and the tag is not in the inputs a random material that has the tag will be produced."
 	},
 	{
 		"name": "cosmetic_particle",
@@ -56,7 +56,7 @@
 		"name": "req_lifetime",
 		"type": "int",
 		"default": "0",
-		"doc": "Only do the reaction if input_cell1 has lived longer than this"
+		"doc": "Only do the reaction if input_cell1 has lived longer than this. Can be a tag `[tag_name]` or a cell `cell_name`"
 	},
 	{
 		"name": "blob_radius1",

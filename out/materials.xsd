@@ -1339,7 +1339,7 @@
 
 	<!-- Material Reactions -->
 	<xsd:complexType name="MaterialReactions">
-		<!-- Reaction Docs --><xsd:annotation><xsd:documentation><![CDATA[<br>```cpp<br>class Reaction {<br>&emsp;&emsp;&emsp;&emsp;bool fast_reaction = 0; //  Makes the reaction go faster<br>&emsp;&emsp;&emsp;&emsp;float probability = 0; //  If the cells are selected this is the percentage chance the reaction occurs. This can have up to 2 decimal places, further precision does nothing.<br>&emsp;&emsp;&emsp;&emsp;std::string input_cell1; //  The first cell in the reaction<br>&emsp;&emsp;&emsp;&emsp;std::string output_cell1; //  The material input_cell1 is converted to<br>&emsp;&emsp;&emsp;&emsp;std::string input_cell2; //  The second cell in the reaction<br>&emsp;&emsp;&emsp;&emsp;std::string output_cell2; //  The material input_cell2 is converted to<br>&emsp;&emsp;&emsp;&emsp;std::string input_cell3 = ""; //  If this is empty its a 2 cell reaction, if it's not then it's a 3 cell reaction, and output_cell3 must be set<br>&emsp;&emsp;&emsp;&emsp;std::string output_cell3 = ""; //  If this is empty its a 2 cell reaction, if it's not then it's a 3 cell reaction, and input_cell3 must be set<br>&emsp;&emsp;&emsp;&emsp;std::string cosmetic_particle = "";<br>&emsp;&emsp;&emsp;&emsp;int req_lifetime = 0; //  Only do the reaction if input_cell1 has lived longer than this<br>&emsp;&emsp;&emsp;&emsp;int blob_radius1 = 0; //  Radius of pixels of input_cell1 to react<br>&emsp;&emsp;&emsp;&emsp;int blob_radius2 = 0; //  Radius of pixels of input_cell1 to react<br>&emsp;&emsp;&emsp;&emsp;bool blob_restrict_to_input_material1 = 1;<br>&emsp;&emsp;&emsp;&emsp;bool blob_restrict_to_input_material2 = 1;<br>&emsp;&emsp;&emsp;&emsp;bool destroy_horizontally_lonely_pixels = 0;<br>&emsp;&emsp;&emsp;&emsp;REACTION_DIRECTION direction = none; //  Only do the reaction if input_cell2 is in this direction from input_cell2<br>&emsp;&emsp;&emsp;&emsp;bool convert_all = 0; //  If true floodfills the connected region of each input cell type and converts them to their respective output<br>&emsp;&emsp;&emsp;&emsp;std::string entity = ""; //  Loads this entity at the reaction coords when it happens<br>&emsp;&emsp;&emsp;&emsp;float audio_fx_volume_1 = 0;<br>};<br>```<br>]]></xsd:documentation></xsd:annotation><!-- Reaction Docs -->
+		<!-- Reaction Docs --><xsd:annotation><xsd:documentation><![CDATA[<br>```cpp<br>class Reaction {<br>&emsp;&emsp;&emsp;&emsp;bool fast_reaction = 0; //  Makes the reaction go faster<br>&emsp;&emsp;&emsp;&emsp;float probability = 0; //  If the cells are selected this is the percentage chance the reaction occurs. This can have up to 2 decimal places, further precision does nothing.<br>&emsp;&emsp;&emsp;&emsp;std::string input_cell1; //  The first cell in the reaction. Can be a tag `[tag_name]` or a cell `cell_name`<br>&emsp;&emsp;&emsp;&emsp;std::string output_cell1; //  The material input_cell1 is converted to. Can be a tag `[tag_name]` or a cell `cell_name`. If this is a tag and the tag is not in the inputs a random material that has the tag will be produced.<br>&emsp;&emsp;&emsp;&emsp;std::string input_cell2; //  The second cell in the reaction. Can be a tag `[tag_name]` or a cell `cell_name`<br>&emsp;&emsp;&emsp;&emsp;std::string output_cell2; //  The material input_cell2 is converted to. Can be a tag `[tag_name]` or a cell `cell_name`. If this is a tag and the tag is not in the inputs a random material that has the tag will be produced.<br>&emsp;&emsp;&emsp;&emsp;std::string input_cell3 = ""; //  If this is empty its a 2 cell reaction, if it's not then it's a 3 cell reaction, and output_cell3 must be set. Can be a tag `[tag_name]` or a cell `cell_name`<br>&emsp;&emsp;&emsp;&emsp;std::string output_cell3 = ""; //  If this is empty its a 2 cell reaction, if it's not then it's a 3 cell reaction, and input_cell3 must be set. Can be a tag `[tag_name]` or a cell `cell_name`. If this is a tag and the tag is not in the inputs a random material that has the tag will be produced.<br>&emsp;&emsp;&emsp;&emsp;std::string cosmetic_particle = "";<br>&emsp;&emsp;&emsp;&emsp;int req_lifetime = 0; //  Only do the reaction if input_cell1 has lived longer than this. Can be a tag `[tag_name]` or a cell `cell_name`<br>&emsp;&emsp;&emsp;&emsp;int blob_radius1 = 0; //  Radius of pixels of input_cell1 to react<br>&emsp;&emsp;&emsp;&emsp;int blob_radius2 = 0; //  Radius of pixels of input_cell1 to react<br>&emsp;&emsp;&emsp;&emsp;bool blob_restrict_to_input_material1 = 1;<br>&emsp;&emsp;&emsp;&emsp;bool blob_restrict_to_input_material2 = 1;<br>&emsp;&emsp;&emsp;&emsp;bool destroy_horizontally_lonely_pixels = 0;<br>&emsp;&emsp;&emsp;&emsp;REACTION_DIRECTION direction = none; //  Only do the reaction if input_cell2 is in this direction from input_cell2<br>&emsp;&emsp;&emsp;&emsp;bool convert_all = 0; //  If true floodfills the connected region of each input cell type and converts them to their respective output<br>&emsp;&emsp;&emsp;&emsp;std::string entity = ""; //  Loads this entity at the reaction coords when it happens<br>&emsp;&emsp;&emsp;&emsp;float audio_fx_volume_1 = 0;<br>};<br>```<br>]]></xsd:documentation></xsd:annotation><!-- Reaction Docs -->
 		<xsd:choice>
 			<xsd:element name="ExplosionConfig" type="ConfigExplosion" minOccurs="0" />
 		</xsd:choice>
@@ -1356,32 +1356,32 @@
 		</xsd:attribute>
 		<xsd:attribute name="input_cell1" type="xsd:string" use="required">
 			<xsd:annotation>
-				<xsd:documentation><![CDATA[```cpp<br>std::string input_cell1; //  The first cell in the reaction<br>```]]></xsd:documentation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string input_cell1; //  The first cell in the reaction. Can be a tag `[tag_name]` or a cell `cell_name`<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="output_cell1" type="xsd:string" use="required">
 			<xsd:annotation>
-				<xsd:documentation><![CDATA[```cpp<br>std::string output_cell1; //  The material input_cell1 is converted to<br>```]]></xsd:documentation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string output_cell1; //  The material input_cell1 is converted to. Can be a tag `[tag_name]` or a cell `cell_name`. If this is a tag and the tag is not in the inputs a random material that has the tag will be produced.<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="input_cell2" type="xsd:string" use="required">
 			<xsd:annotation>
-				<xsd:documentation><![CDATA[```cpp<br>std::string input_cell2; //  The second cell in the reaction<br>```]]></xsd:documentation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string input_cell2; //  The second cell in the reaction. Can be a tag `[tag_name]` or a cell `cell_name`<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="output_cell2" type="xsd:string" use="required">
 			<xsd:annotation>
-				<xsd:documentation><![CDATA[```cpp<br>std::string output_cell2; //  The material input_cell2 is converted to<br>```]]></xsd:documentation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string output_cell2; //  The material input_cell2 is converted to. Can be a tag `[tag_name]` or a cell `cell_name`. If this is a tag and the tag is not in the inputs a random material that has the tag will be produced.<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="input_cell3" type="xsd:string" default="">
 			<xsd:annotation>
-				<xsd:documentation><![CDATA[```cpp<br>std::string input_cell3 = ""; //  If this is empty its a 2 cell reaction, if it's not then it's a 3 cell reaction, and output_cell3 must be set<br>```]]></xsd:documentation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string input_cell3 = ""; //  If this is empty its a 2 cell reaction, if it's not then it's a 3 cell reaction, and output_cell3 must be set. Can be a tag `[tag_name]` or a cell `cell_name`<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="output_cell3" type="xsd:string" default="">
 			<xsd:annotation>
-				<xsd:documentation><![CDATA[```cpp<br>std::string output_cell3 = ""; //  If this is empty its a 2 cell reaction, if it's not then it's a 3 cell reaction, and input_cell3 must be set<br>```]]></xsd:documentation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string output_cell3 = ""; //  If this is empty its a 2 cell reaction, if it's not then it's a 3 cell reaction, and input_cell3 must be set. Can be a tag `[tag_name]` or a cell `cell_name`. If this is a tag and the tag is not in the inputs a random material that has the tag will be produced.<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="cosmetic_particle" type="xsd:string" default="">
@@ -1391,7 +1391,7 @@
 		</xsd:attribute>
 		<xsd:attribute name="req_lifetime" type="xsd:int" default="0">
 			<xsd:annotation>
-				<xsd:documentation><![CDATA[```cpp<br>int req_lifetime = 0; //  Only do the reaction if input_cell1 has lived longer than this<br>```]]></xsd:documentation>
+				<xsd:documentation><![CDATA[```cpp<br>int req_lifetime = 0; //  Only do the reaction if input_cell1 has lived longer than this. Can be a tag `[tag_name]` or a cell `cell_name`<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="blob_radius1" type="xsd:int" default="0">
