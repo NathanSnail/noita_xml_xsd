@@ -51,7 +51,7 @@
         "name": "tags",
         "type": "std::string",
         "default": "",
-        "doc": "A list of tags."
+        "doc": "A list of tags. The special tags `[*]` (any), `[any_liquid]` (cell_type=\"liquid\" and liquid_sand=\"0\"), `[any_powder]` (cell_type=\"liquid\" and liquid_sand=\"1\") are added automatically"
     },
     {
         "name": "audio_physics_material_event",
