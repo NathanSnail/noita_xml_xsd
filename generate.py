@@ -3,7 +3,7 @@ import re
 import sys
 from dataclasses import dataclass
 import json
-from typing import Dict, List, Tuple
+from typing import Dict
 from typing_extensions import deprecated
 
 PRIMARY_FILE = True
@@ -273,6 +273,13 @@ def render_component(comp: Component) -> str:
 \t\t\t</xsd:all>""" if len(objects) != 0 else ""}{
 "\n" + "\n".join(attrs) if len(attrs) != 0 else ""}
 \t\t<xsd:attributeGroup ref="CommonComponentAttributes"/>
+\t</xsd:complexType>
+\t<xsd:complexType name="{comp.name}Base">
+\t\t<xsd:complexContent>
+\t\t\t<xsd:extension base="{comp.name}">
+\t\t\t\t<xsd:attribute name="_remove_from_base" type="NoitaBool"/>
+\t\t\t</xsd:extension>
+\t\t</xsd:complexContent>
 \t</xsd:complexType>"""[
         1:
     ]
@@ -485,7 +492,7 @@ out = f"""
 \t\t</xsd:attribute>
 \t</xsd:complexType>
 \t{"\n".join([render_enum(enum) for enum in enums])}
-\t<xsd:complexType name="EntityBase">
+\t<xsd:complexType name="Entity">
 \t\t<xsd:sequence minOccurs="0">
 \t\t\t<xsd:choice maxOccurs="unbounded" minOccurs="0">
 \t\t\t\t<xsd:element ref="Entity" />
@@ -498,7 +505,20 @@ out = f"""
 \t\t<xsd:attribute name="tags" type="xsd:string" />
 \t\t<xsd:attribute name="serialize" type="NoitaBool" default="1" />
 \t</xsd:complexType>
-\t<xsd:element name="Entity" type="EntityBase">
+\t<xsd:complexType name="EntityBase">
+\t\t<xsd:sequence minOccurs="0">
+\t\t\t<xsd:choice maxOccurs="unbounded" minOccurs="0">
+\t\t\t\t<xsd:element ref="Entity" />
+\t\t\t\t<xsd:element name="Base" type="Base" />
+\t\t\t\t<xsd:element name="_Transform" type="Transform" />
+\t\t\t\t{"\n\t\t\t\t".join([f"<xsd:element name=\"{comp.name}\" type=\"{comp.name}Base\" />" for comp in components])}
+\t\t\t</xsd:choice>
+\t\t</xsd:sequence>
+\t\t<xsd:attribute name="name" type="xsd:string" />
+\t\t<xsd:attribute name="tags" type="xsd:string" />
+\t\t<xsd:attribute name="serialize" type="NoitaBool" default="1" />
+\t</xsd:complexType>
+\t<xsd:element name="Entity" type="Entity">
 \t\t<xsd:annotation>
 \t\t\t<xsd:documentation>Represents an entity that can be loaded into the world</xsd:documentation>
 \t\t</xsd:annotation>
