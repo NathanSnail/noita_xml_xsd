@@ -16761,66 +16761,91 @@
 
 	<xsd:element name="Mod">
 		<xsd:complexType mixed="true">
-			<!-- Mod Docs --><xsd:annotation><xsd:documentation><![CDATA[<br>```cpp<br>class Mod {<br>&emsp;&emsp;&emsp;&emsp;std::string name; //  The name of the mod in the mod list. Not required by the parser, empty if missing<br>&emsp;&emsp;&emsp;&emsp;std::string description; //  The description of the mod in the mod list. Not required by the parser, empty if missing<br>&emsp;&emsp;&emsp;&emsp;bool request_no_api_restrictions = 0; //  If 1 the mod's lua state opens the full LuaJIT library set (package/require, io, os, debug, ffi) and keeps load/loadstring/collectgarbage. The player must allow unsafe mods, and such mods don't work through the Steam Workshop<br>&emsp;&emsp;&emsp;&emsp;std::string ui_newgame_name = ""; //  Game mode name shown in the new game menu. Only used with is_game_mode="1". Accepts $translation keys<br>&emsp;&emsp;&emsp;&emsp;std::string ui_newgame_description = ""; //  Game mode description shown in the new game menu. Only used with is_game_mode="1". Accepts $translation keys<br>&emsp;&emsp;&emsp;&emsp;std::string ui_newgame_gfx_banner_bg = ""; //  Path to the background image of the game mode's new game menu banner, e.g. mods/<id>/files/menu_banner_background.png<br>&emsp;&emsp;&emsp;&emsp;std::string ui_newgame_gfx_banner_fg = ""; //  Path to the overlay image of the game mode's new game menu banner, e.g. mods/<id>/files/menu_banner_overlay.png<br>&emsp;&emsp;&emsp;&emsp;bool is_game_mode = 0; //  If 1 this mod is a game mode: it isn't enabled from the mod list but started from the new game menu, using the ui_newgame_* attributes<br>&emsp;&emsp;&emsp;&emsp;bool game_mode_supports_save_slots = 0; //  If 1 a game mode (is_game_mode="1") supports multiple save slots<br>&emsp;&emsp;&emsp;&emsp;bool is_translation = 0; //  If 1 normal mod functionality is turned off and the mod is listed under Language in the options menu instead, using translation_xml_path and translation_csv_path<br>&emsp;&emsp;&emsp;&emsp;std::string translation_xml_path = ""; //  Path to the <Language> xml of a translation mod (language key, name, fonts, UI offsets), e.g. mods/<id>/translation.xml<br>&emsp;&emsp;&emsp;&emsp;std::string translation_csv_path = ""; //  Path to the translation csv of a translation mod, e.g. mods/<id>/translation.csv<br>};<br>```<br>]]></xsd:documentation></xsd:annotation><!-- Mod Docs -->
+			<!-- Mod Docs --><xsd:annotation><xsd:documentation><![CDATA[<br>```cpp<br>class Mod {<br>&emsp;&emsp;&emsp;&emsp;std::string name = ""; //  mod.xml: name in the mod list. workshop.xml: Workshop item title. Not required by the game, empty if missing<br>&emsp;&emsp;&emsp;&emsp;std::string description = ""; //  mod.xml: description in the mod list. workshop.xml: Workshop description; an empty one leaves the Workshop page text unchanged<br>&emsp;&emsp;&emsp;&emsp;bool request_no_api_restrictions = 0; //  mod.xml only. If 1 the mod's lua state opens the full LuaJIT library set (package/require, io, os, debug, ffi) and keeps load/loadstring/collectgarbage. The player must allow unsafe mods, and such mods don't work through the Steam Workshop<br>&emsp;&emsp;&emsp;&emsp;std::string ui_newgame_name = ""; //  mod.xml only. Game mode name shown in the new game menu. Only used with is_game_mode="1". Accepts $translation keys<br>&emsp;&emsp;&emsp;&emsp;std::string ui_newgame_description = ""; //  mod.xml only. Game mode description shown in the new game menu. Only used with is_game_mode="1". Accepts $translation keys<br>&emsp;&emsp;&emsp;&emsp;std::string ui_newgame_gfx_banner_bg = ""; //  mod.xml only. Path to the background image of the game mode's new game menu banner, e.g. mods/<id>/files/menu_banner_background.png<br>&emsp;&emsp;&emsp;&emsp;std::string ui_newgame_gfx_banner_fg = ""; //  mod.xml only. Path to the overlay image of the game mode's new game menu banner, e.g. mods/<id>/files/menu_banner_overlay.png<br>&emsp;&emsp;&emsp;&emsp;bool is_game_mode = 0; //  mod.xml only. If 1 this mod is a game mode: it isn't enabled from the mod list but started from the new game menu, using the ui_newgame_* attributes<br>&emsp;&emsp;&emsp;&emsp;bool game_mode_supports_save_slots = 0; //  mod.xml only. If 1 a game mode (is_game_mode="1") supports multiple save slots<br>&emsp;&emsp;&emsp;&emsp;bool is_translation = 0; //  mod.xml only. If 1 normal mod functionality is turned off and the mod is listed under Language in the options menu instead, using translation_xml_path and translation_csv_path<br>&emsp;&emsp;&emsp;&emsp;std::string translation_xml_path = ""; //  mod.xml only. Path to the <Language> xml of a translation mod (language key, name, fonts, UI offsets), e.g. mods/<id>/translation.xml<br>&emsp;&emsp;&emsp;&emsp;std::string translation_csv_path = ""; //  mod.xml only. Path to the translation csv of a translation mod, e.g. mods/<id>/translation.csv<br>&emsp;&emsp;&emsp;&emsp;std::string tags = ""; //  workshop.xml only (ignored in mod.xml). Comma-separated Steam Workshop tags, spelled exactly as listed in tools_modding/READ_ME_FIRST.txt<br>&emsp;&emsp;&emsp;&emsp;std::string dont_upload_folders = ""; //  workshop.xml only (ignored in mod.xml). Folders not to upload, separated with |, e.g. ignore_this|files\ignore_this_subfolder<br>&emsp;&emsp;&emsp;&emsp;std::string dont_upload_files = ""; //  workshop.xml only (ignored in mod.xml). Files not to upload, separated with |, e.g. README.md|.gitignore<br>&emsp;&emsp;&emsp;&emsp;int _format_version = 0; //  compatibility.xml only. Format version of this file<br>&emsp;&emsp;&emsp;&emsp;int version_built_with = 0; //  compatibility.xml only. Game build number recorded for the mod<br>};<br>```<br>]]></xsd:documentation></xsd:annotation><!-- Mod Docs -->
 			<!-- Mod Attributes -->
-		<xsd:attribute name="name" type="xsd:string" use="required">
+		<xsd:attribute name="name" type="xsd:string" default="">
 			<xsd:annotation>
-				<xsd:documentation><![CDATA[```cpp<br>std::string name; //  The name of the mod in the mod list. Not required by the parser, empty if missing<br>```]]></xsd:documentation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string name = ""; //  mod.xml: name in the mod list. workshop.xml: Workshop item title. Not required by the game, empty if missing<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
-		<xsd:attribute name="description" type="xsd:string" use="required">
+		<xsd:attribute name="description" type="xsd:string" default="">
 			<xsd:annotation>
-				<xsd:documentation><![CDATA[```cpp<br>std::string description; //  The description of the mod in the mod list. Not required by the parser, empty if missing<br>```]]></xsd:documentation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string description = ""; //  mod.xml: description in the mod list. workshop.xml: Workshop description; an empty one leaves the Workshop page text unchanged<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="request_no_api_restrictions" type="NoitaBool" default="0">
 			<xsd:annotation>
-				<xsd:documentation><![CDATA[```cpp<br>bool request_no_api_restrictions = 0; //  If 1 the mod's lua state opens the full LuaJIT library set (package/require, io, os, debug, ffi) and keeps load/loadstring/collectgarbage. The player must allow unsafe mods, and such mods don't work through the Steam Workshop<br>```]]></xsd:documentation>
+				<xsd:documentation><![CDATA[```cpp<br>bool request_no_api_restrictions = 0; //  mod.xml only. If 1 the mod's lua state opens the full LuaJIT library set (package/require, io, os, debug, ffi) and keeps load/loadstring/collectgarbage. The player must allow unsafe mods, and such mods don't work through the Steam Workshop<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="ui_newgame_name" type="xsd:string" default="">
 			<xsd:annotation>
-				<xsd:documentation><![CDATA[```cpp<br>std::string ui_newgame_name = ""; //  Game mode name shown in the new game menu. Only used with is_game_mode="1". Accepts $translation keys<br>```]]></xsd:documentation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string ui_newgame_name = ""; //  mod.xml only. Game mode name shown in the new game menu. Only used with is_game_mode="1". Accepts $translation keys<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="ui_newgame_description" type="xsd:string" default="">
 			<xsd:annotation>
-				<xsd:documentation><![CDATA[```cpp<br>std::string ui_newgame_description = ""; //  Game mode description shown in the new game menu. Only used with is_game_mode="1". Accepts $translation keys<br>```]]></xsd:documentation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string ui_newgame_description = ""; //  mod.xml only. Game mode description shown in the new game menu. Only used with is_game_mode="1". Accepts $translation keys<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="ui_newgame_gfx_banner_bg" type="xsd:string" default="">
 			<xsd:annotation>
-				<xsd:documentation><![CDATA[```cpp<br>std::string ui_newgame_gfx_banner_bg = ""; //  Path to the background image of the game mode's new game menu banner, e.g. mods/<id>/files/menu_banner_background.png<br>```]]></xsd:documentation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string ui_newgame_gfx_banner_bg = ""; //  mod.xml only. Path to the background image of the game mode's new game menu banner, e.g. mods/<id>/files/menu_banner_background.png<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="ui_newgame_gfx_banner_fg" type="xsd:string" default="">
 			<xsd:annotation>
-				<xsd:documentation><![CDATA[```cpp<br>std::string ui_newgame_gfx_banner_fg = ""; //  Path to the overlay image of the game mode's new game menu banner, e.g. mods/<id>/files/menu_banner_overlay.png<br>```]]></xsd:documentation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string ui_newgame_gfx_banner_fg = ""; //  mod.xml only. Path to the overlay image of the game mode's new game menu banner, e.g. mods/<id>/files/menu_banner_overlay.png<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="is_game_mode" type="NoitaBool" default="0">
 			<xsd:annotation>
-				<xsd:documentation><![CDATA[```cpp<br>bool is_game_mode = 0; //  If 1 this mod is a game mode: it isn't enabled from the mod list but started from the new game menu, using the ui_newgame_* attributes<br>```]]></xsd:documentation>
+				<xsd:documentation><![CDATA[```cpp<br>bool is_game_mode = 0; //  mod.xml only. If 1 this mod is a game mode: it isn't enabled from the mod list but started from the new game menu, using the ui_newgame_* attributes<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="game_mode_supports_save_slots" type="NoitaBool" default="0">
 			<xsd:annotation>
-				<xsd:documentation><![CDATA[```cpp<br>bool game_mode_supports_save_slots = 0; //  If 1 a game mode (is_game_mode="1") supports multiple save slots<br>```]]></xsd:documentation>
+				<xsd:documentation><![CDATA[```cpp<br>bool game_mode_supports_save_slots = 0; //  mod.xml only. If 1 a game mode (is_game_mode="1") supports multiple save slots<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="is_translation" type="NoitaBool" default="0">
 			<xsd:annotation>
-				<xsd:documentation><![CDATA[```cpp<br>bool is_translation = 0; //  If 1 normal mod functionality is turned off and the mod is listed under Language in the options menu instead, using translation_xml_path and translation_csv_path<br>```]]></xsd:documentation>
+				<xsd:documentation><![CDATA[```cpp<br>bool is_translation = 0; //  mod.xml only. If 1 normal mod functionality is turned off and the mod is listed under Language in the options menu instead, using translation_xml_path and translation_csv_path<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="translation_xml_path" type="xsd:string" default="">
 			<xsd:annotation>
-				<xsd:documentation><![CDATA[```cpp<br>std::string translation_xml_path = ""; //  Path to the <Language> xml of a translation mod (language key, name, fonts, UI offsets), e.g. mods/<id>/translation.xml<br>```]]></xsd:documentation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string translation_xml_path = ""; //  mod.xml only. Path to the <Language> xml of a translation mod (language key, name, fonts, UI offsets), e.g. mods/<id>/translation.xml<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="translation_csv_path" type="xsd:string" default="">
 			<xsd:annotation>
-				<xsd:documentation><![CDATA[```cpp<br>std::string translation_csv_path = ""; //  Path to the translation csv of a translation mod, e.g. mods/<id>/translation.csv<br>```]]></xsd:documentation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string translation_csv_path = ""; //  mod.xml only. Path to the translation csv of a translation mod, e.g. mods/<id>/translation.csv<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="tags" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string tags = ""; //  workshop.xml only (ignored in mod.xml). Comma-separated Steam Workshop tags, spelled exactly as listed in tools_modding/READ_ME_FIRST.txt<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="dont_upload_folders" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string dont_upload_folders = ""; //  workshop.xml only (ignored in mod.xml). Folders not to upload, separated with |, e.g. ignore_this|files\ignore_this_subfolder<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="dont_upload_files" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string dont_upload_files = ""; //  workshop.xml only (ignored in mod.xml). Files not to upload, separated with |, e.g. README.md|.gitignore<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="_format_version" type="xsd:int" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int _format_version = 0; //  compatibility.xml only. Format version of this file<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="version_built_with" type="xsd:int" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int version_built_with = 0; //  compatibility.xml only. Game build number recorded for the mod<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
 <!-- Mod Attributes -->
