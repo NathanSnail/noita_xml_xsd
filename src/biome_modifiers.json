@@ -1,0 +1,62 @@
+[
+	{
+		"name": "dust_amount",
+		"type": "float",
+		"default": "0.0",
+		"doc": "amount of dust rendered"
+	},
+	{
+		"name": "projectile_drag_coeff",
+		"type": "float",
+		"default": "1.0",
+		"doc": "projectile velocity is multiplied with this value every frame"
+	},
+	{
+		"name": "entity_gravity_y_multiplier",
+		"type": "float",
+		"default": "1.0",
+		"doc": "affects the VelocityComponents gravity_y"
+	},
+	{
+		"name": "fog_of_war_delta",
+		"type": "int8",
+		"default": "0",
+		"doc": "fog of war change per frame (range -10..10)"
+	},
+	{
+		"name": "fire_extinguish_chance",
+		"type": "uint8",
+		"default": "0",
+		"doc": "probability of fire being extinguished per cell update (range 0..100)"
+	},
+	{
+		"name": "reaction_freeze_chance",
+		"type": "uint8",
+		"default": "0",
+		"doc": "probability of spontaneous freezing reactions per cell reaction update (range 0..100)"
+	},
+	{
+		"name": "reaction_unfreeze_chance",
+		"type": "uint8",
+		"default": "0",
+		"doc": "probability of spontaneous frozen material melting reactions per cell reaction update (range 0..100)"
+	},
+	{
+		"name": "random_water_stains_chance",
+		"type": "uint8",
+		"default": "0",
+		"doc": "probability of random water stains being added to characters (range 0..100)"
+	},
+	{
+		"name": "random_water_stains_amount",
+		"type": "uint8",
+		"default": "0",
+		"doc": "number of water cells added when adding random water stains (range 0..100)"
+	},
+	{
+		"name": "everything_is_conductive",
+		"type": "bool",
+		"default": "0",
+		"doc": "if 1, every static material in this place conduct electricity"
+	}
+]

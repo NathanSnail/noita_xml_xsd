@@ -1,0 +1,1072 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<!--Builtin-->
+	<xsd:simpleType name="NoitaBool">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="0" />
+			<xsd:enumeration value="1" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="BIOME_TYPE">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="BIOME_PROCEDURAL" />
+			<xsd:enumeration value="BIOME_BITMAP" />
+			<xsd:enumeration value="BIOME_WANG_TILE" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="FOG_OF_WAR_TYPE">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="DEFAULT" />
+			<xsd:enumeration value="HEAVY_CLEAR_AT_PLAYER" />
+			<xsd:enumeration value="HEAVY_CLEAR_WITH_MAGIC" />
+			<xsd:enumeration value="HEAVY_NO_CLEAR" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="NOISE_TYPE">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="IQ2_SIMPLEX1234" />
+			<xsd:enumeration value="IQ_SIMPLEX" />
+			<xsd:enumeration value="SIN_CAPPED_EVERYTHING" />
+			<xsd:enumeration value="SIN_CAPPED_SIMPLEX" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="GENERAL_NOISE">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="IQNoise" />
+			<xsd:enumeration value="DirtyPeeNoise" />
+			<xsd:enumeration value="QemNoise" />
+			<xsd:enumeration value="WhiteNoise" />
+			<xsd:enumeration value="MixNoise" />
+			<xsd:enumeration value="SimplexNoise" />
+			<xsd:enumeration value="STB_Perlin" />
+			<xsd:enumeration value="FastBlockNoise" />
+			<xsd:enumeration value="SimplexNoise1234" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!--Builtin-->
+	<xsd:element name="Biome">
+		<xsd:complexType mixed="true">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[A biome file. The game reads exactly two children: `<Topology>` (shape, background, audio) and `<Materials>` (what fills it). Anything else is ignored.]]></xsd:documentation>
+			</xsd:annotation>
+			<xsd:all>
+				<xsd:element name="Topology" minOccurs="0">
+					<xsd:complexType mixed="true">
+						<!-- Topology Docs --><xsd:annotation><xsd:documentation><![CDATA[<br>```cpp<br>class Biome {<br>&emsp;&emsp;&emsp;&emsp;std::string name = ""; //  the name that is exposed to lua functions that spawn entities. Usually a $biome_ translation key<br>&emsp;&emsp;&emsp;&emsp;BIOME_TYPE::Enum type = BIOME_PROCEDURAL; //  Generator: BIOME_PROCEDURAL (cave noise), BIOME_BITMAP (bitmap_filename), BIOME_WANG_TILE (wang_template_file)<br>&emsp;&emsp;&emsp;&emsp;std::string background_image = ""; //  path to the image file (texture) that is used for the background<br>&emsp;&emsp;&emsp;&emsp;std::string background_edge_left = ""; //  if not empty, will use this image as the left edge<br>&emsp;&emsp;&emsp;&emsp;std::string background_edge_right = ""; //  if not empty, will use this image as the right edge<br>&emsp;&emsp;&emsp;&emsp;std::string background_edge_top = ""; //  if not empty, will use this image as the top edge<br>&emsp;&emsp;&emsp;&emsp;std::string background_edge_bottom = ""; //  if not empty, will use this image as the bottom edge<br>&emsp;&emsp;&emsp;&emsp;int background_edge_priority = 0; //  if both biomes have edges defined, will use the one with higher priority (if priority is same, will compare (>) background_images)<br>&emsp;&emsp;&emsp;&emsp;bool background_use_neighbor = 0; //  if set will look for neighboring biomes and use their background image<br>&emsp;&emsp;&emsp;&emsp;float background_image_height = 225.0; //  height were the background image starts<br>&emsp;&emsp;&emsp;&emsp;bool limit_background_image = 1; //  Will limit the background image to start at the cave height<br>&emsp;&emsp;&emsp;&emsp;std::string bitmap_noise_file = ""; //  if set, loads it to mBitmapNoise<br>&emsp;&emsp;&emsp;&emsp;bool noise_biome_edges = 1; //  does the noisy edge for biomes, if either of biomes has this set to 0 will do a straight edge<br>&emsp;&emsp;&emsp;&emsp;bool big_noise_biome_edges = 1; //  if true, will leak onto other biomes and not be carveable<br>&emsp;&emsp;&emsp;&emsp;bool fat_biome_edges = 0; //  if true, will leak onto other biomes and not be carveable<br>&emsp;&emsp;&emsp;&emsp;bool skip_edge_textures = 0; //  skips edge texture generation. Turn of for pixel scenes<br>&emsp;&emsp;&emsp;&emsp;std::string audio_music_enter = ""; //  the music event that plays when player enters this biome (e.g. 'music/desert/enter')<br>&emsp;&emsp;&emsp;&emsp;std::string audio_music_2 = ""; //  the music directory that plays while player is in this biome (e.g 'coalmine')<br>&emsp;&emsp;&emsp;&emsp;float audio_music_energy_coeff = 1.0; //  Multiplier for music energy in this biome<br>&emsp;&emsp;&emsp;&emsp;bool audio_music_no_forced_quietness = 0; //  If 1, music is not quieted by occasional quietness<br>&emsp;&emsp;&emsp;&emsp;int audio_music_forced_quietness_duration_seconds = 0; //  If > 0, this is the duration of occasional quietness, else the value from magic numbers is used.<br>&emsp;&emsp;&emsp;&emsp;bool audio_music_trigger_without_danger = 0; //  If 1, music is triggered in this biome no matter what the danger level is<br>&emsp;&emsp;&emsp;&emsp;int audio_music_trigger_min_y = 0;<br>&emsp;&emsp;&emsp;&emsp;int audio_music_trigger_max_y = 0;<br>&emsp;&emsp;&emsp;&emsp;std::string audio_biome_id_for_music = "";<br>&emsp;&emsp;&emsp;&emsp;std::string audio_ambience = "cave"; //  the ambience event that plays while player is in this biome<br>&emsp;&emsp;&emsp;&emsp;std::string audio_ambience_surface = "hills"; //  the ambience event that plays while player is in this biome and on surface<br>&emsp;&emsp;&emsp;&emsp;float color_grading_r = 1.0; //  post fx color grading<br>&emsp;&emsp;&emsp;&emsp;float color_grading_g = 1.0; //  post fx color grading<br>&emsp;&emsp;&emsp;&emsp;float color_grading_b = 1.0; //  post fx color grading<br>&emsp;&emsp;&emsp;&emsp;float color_grading_grayscale = 0.0; //  post fx color grading. [0.0,1.0], larger value means more grayscale<br>&emsp;&emsp;&emsp;&emsp;bool has_rain = 1; //  if 1, rain or snowfall may occur in this biome<br>&emsp;&emsp;&emsp;&emsp;FOG_OF_WAR_TYPE::Enum fog_of_war_type = DEFAULT; //  the way removing fog of war works in this biome<br>&emsp;&emsp;&emsp;&emsp;float gradient_sky_alpha_target_mod = 0.0;<br>&emsp;&emsp;&emsp;&emsp;float rain_target_mod = 0.0;<br>&emsp;&emsp;&emsp;&emsp;float fog_target_mod = 0.0;<br>&emsp;&emsp;&emsp;&emsp;float sunset_alpha_target = 1.0; //  affects sunset gradient amount<br>&emsp;&emsp;&emsp;&emsp;std::string bitmap_filename = ""; //  loads the chunk from this bitmap, the bitmap should be 512x512<br>&emsp;&emsp;&emsp;&emsp;std::string wang_template_file = ""; //  uses this file to create a herringbone wang map<br>&emsp;&emsp;&emsp;&emsp;int wang_map_width = 256; //  the size of the wang map (range 1..512)<br>&emsp;&emsp;&emsp;&emsp;int wang_map_height = 256; //  the size of the wang map (range 1..512)<br>&emsp;&emsp;&emsp;&emsp;std::string lua_script = ""; //  default is data/scripts/biomes/NAME.lua<br>&emsp;&emsp;&emsp;&emsp;bool pixel_scene = 0; //  for 'pixel scene' biomes, this forces the loading before hand<br>&emsp;&emsp;&emsp;&emsp;bool static_tile = 0; //  if 1, directly blits wang_template_file without wang randomization, kind of like a pixel scene but at the wang tile resolution<br>&emsp;&emsp;&emsp;&emsp;std::string static_tile_bg_mask = ""; //  if set, and static tile is 1, the background_image will use a special shader and this mask to calculate visiblity. should be same size and resolution as 'wang_template_file'<br>&emsp;&emsp;&emsp;&emsp;float static_tile_bg_mask_threshold = 0.5; //  threshold used in 'sprite_static_tile_bg.frag' shader in conjuction with 'sprite_static_tile_bg_mask' to determine if a background pixel is visible or not<br>&emsp;&emsp;&emsp;&emsp;float game_enemy_hp_scale = 1.0; //  1.f = default. Will multiply the hp of the camerabounded enemies in the area with hp_scale<br>&emsp;&emsp;&emsp;&emsp;float game_enemy_attack_speed = 1.0; //  1.f = default. This multiplies AnimalAI's attack_ranged_frames_between in camerabounded enemies<br>&emsp;&emsp;&emsp;&emsp;NOISE_TYPE::Enum noise_type = IQ2_SIMPLEX1234; //  the style of the cave noise<br>&emsp;&emsp;&emsp;&emsp;GENERAL_NOISE::Enum mInsideNoiseType = SimplexNoise; //  the style of the inside noise<br>&emsp;&emsp;&emsp;&emsp;bool mInsideNoiseFBM = 1; //  will fbm the mInsideNoise if set true<br>&emsp;&emsp;&emsp;&emsp;double mInsidePerlinScaleX = 1.0; //  the noise inside the stones...<br>&emsp;&emsp;&emsp;&emsp;double mInsidePerlinScaleY = 1.0; //  the noise inside the stones...<br>&emsp;&emsp;&emsp;&emsp;bool mInsidePerlinSquared = 0;<br>&emsp;&emsp;&emsp;&emsp;bool mInsidePerlinClamped = 0;<br>&emsp;&emsp;&emsp;&emsp;bool mInsidePerlinScaled = 0;<br>&emsp;&emsp;&emsp;&emsp;float mInsidePerlinScaleMin = 0.0;<br>&emsp;&emsp;&emsp;&emsp;float mInsidePerlinScaleMax = 0.0;<br>&emsp;&emsp;&emsp;&emsp;bool mInsidePerlinForceInside = 0; //  if set, will multiply the noise_value with the gradient value<br>&emsp;&emsp;&emsp;&emsp;bool mInsidePerlinOffsetBySeed = 0; //  NOTE( Petri ): 17.8.2023 - if set, will add worldseed as an offset to the noise<br>&emsp;&emsp;&emsp;&emsp;double mInsidePerlinOffsetX = 0.0; //  NOTE( Petri ): 17.8.2023 - perlin noise offset<br>&emsp;&emsp;&emsp;&emsp;double mInsidePerlinOffsetY = 0.0; //  NOTE( Petri ): 17.8.2023 - perlin noise offset<br>&emsp;&emsp;&emsp;&emsp;float mInsideAddValue = 0.0; //  added inside the caves the gradient value<br>&emsp;&emsp;&emsp;&emsp;float mMultiplierGradient = 1.0; //  how much of the gradient is applied<br>&emsp;&emsp;&emsp;&emsp;float mMultiplierPerlin = 1.0; //  how much of the inside noise<br>&emsp;&emsp;&emsp;&emsp;float mMultiplierExtraPerlin = 1.0;<br>&emsp;&emsp;&emsp;&emsp;float mGradientStartY = -512.0;<br>&emsp;&emsp;&emsp;&emsp;float mGradientEndY = 512.0;<br>&emsp;&emsp;&emsp;&emsp;double mGradientSlopeStartX = 0.0; //  if addNoise = 3, will use this to the ( x - mGradientSlopeStartX ) * mGradientSlopeDelta<br>&emsp;&emsp;&emsp;&emsp;double mGradientSlopeDelta = 1.0; //  if addNoise = 3, will use this to the ( x - mGradientSlopeStartX ) * mGradientSlopeDelta<br>&emsp;&emsp;&emsp;&emsp;int mGradientAddNoise = 1; //  fake enum 1=standard noise, 2=fbm noise, 3=slope<br>&emsp;&emsp;&emsp;&emsp;double mGradientNoiseScale = 0.01;<br>&emsp;&emsp;&emsp;&emsp;float mGradientLowNoise = -100.0;<br>&emsp;&emsp;&emsp;&emsp;float mGradientHighNoise = 100.0;<br>&emsp;&emsp;&emsp;&emsp;bool coarse_map_force_terrain = 0; //  if 1, is initially marked as 'terrain' in the coarse map used for sky light calculations etc<br>&emsp;&emsp;&emsp;&emsp;bool coarse_map_not_terrain = 0; //  if 1, is initially never marked as 'terrain' in the coarse map used for sky light calculations etc<br>&emsp;&emsp;&emsp;&emsp;bool coarse_map_cell_count_always_zero = 0; //  if 1, areas in this biome always have a 64x64 cell count of 0<br>&emsp;&emsp;&emsp;&emsp;bool coarse_map_inject_light = 0;<br>};<br>```<br>]]></xsd:documentation></xsd:annotation><!-- Topology Docs -->
+						<xsd:all>
+							<xsd:element name="BitmapCaves" minOccurs="0">
+								<xsd:complexType mixed="true">
+									<!-- BitmapCaves Docs --><xsd:annotation><xsd:documentation><![CDATA[<br>```cpp<br>class CavesSetup {<br>&emsp;&emsp;&emsp;&emsp;std::string name = ""; //  we share these based on the names, so make them unique<br>&emsp;&emsp;&emsp;&emsp;int size_x = 512; //  How big the image is that we generate these from<br>&emsp;&emsp;&emsp;&emsp;int size_y = 256; //  How big the image is that we generate these from<br>&emsp;&emsp;&emsp;&emsp;float spawn_percent = 0.05; //  0-1 - with what chance do we add a spawn point to a cave<br>&emsp;&emsp;&emsp;&emsp;int cave_count_min = 50; //  generates caves n, where n = random(cave_count_min, cave_count_max) (range 0..200)<br>&emsp;&emsp;&emsp;&emsp;int cave_count_max = 100; //  generates caves n, where n = random(cave_count_min, cave_count_max) (range 0..200)<br>&emsp;&emsp;&emsp;&emsp;bool do_beginning_paths = 0; //  if set, will do the paths that go down near the center of the image, used for setting up the caves to coal mines near where player starts<br>&emsp;&emsp;&emsp;&emsp;bool do_beginning_down = 0; //  if true, will do a hole straight down<br>&emsp;&emsp;&emsp;&emsp;int surface_caves_count_min = 7; //  generates caves n from the surface, where n = random(surface_caves_count_min, surface_caves_count_max) (range 0..200)<br>&emsp;&emsp;&emsp;&emsp;int surface_caves_count_max = 12; //  generates caves n from the surface, where n = random(surface_caves_count_min, surface_caves_count_max) (range 0..200)<br>&emsp;&emsp;&emsp;&emsp;float cave_strength_min = 0.2; //  how strongly do we carve the cave<br>&emsp;&emsp;&emsp;&emsp;float cave_strength_max = 1.0; //  how strongly do we carve the cave<br>&emsp;&emsp;&emsp;&emsp;int cave_childs_min = 0; //  how many child trails a cave can have (range 0..10)<br>&emsp;&emsp;&emsp;&emsp;int cave_childs_max = 2; //  how many child trails a cave can have (range 0..10)<br>&emsp;&emsp;&emsp;&emsp;int surface_cave_childs_min = 2; //  how many child trails a cave can have (range 0..10)<br>&emsp;&emsp;&emsp;&emsp;int surface_cave_childs_max = 7; //  how many child trails a cave can have (range 0..10)<br>&emsp;&emsp;&emsp;&emsp;int mountain_count_min = 0; //  how many child trails a cave can have (range 0..10)<br>&emsp;&emsp;&emsp;&emsp;int mountain_count_max = 15; //  how many child trails a cave can have (range 0..10)<br>&emsp;&emsp;&emsp;&emsp;float mountain_size_min = 1.0;<br>&emsp;&emsp;&emsp;&emsp;float mountain_size_max = 10.0;<br>&emsp;&emsp;&emsp;&emsp;int blob_caves_count_min = 20; //   (range 0..50)<br>&emsp;&emsp;&emsp;&emsp;int blob_caves_count_max = 55; //   (range 0..100)<br>&emsp;&emsp;&emsp;&emsp;float blob_caves_strength_min = 1.5; //   (range 0..50)<br>&emsp;&emsp;&emsp;&emsp;float blob_caves_strength_max = 3.0; //   (range 0..100)<br>&emsp;&emsp;&emsp;&emsp;float blob_caves_radius_min = 1.0;<br>&emsp;&emsp;&emsp;&emsp;float blob_caves_radius_max = 10.0;<br>&emsp;&emsp;&emsp;&emsp;std::string DEBUG_output_image = ""; //  if set, will save a png of the height map to the file specified here<br>};<br>```<br>]]></xsd:documentation></xsd:annotation><!-- BitmapCaves Docs -->
+									<xsd:all>
+										<xsd:element name="structures" minOccurs="0">
+											<xsd:complexType mixed="true">
+												<xsd:sequence>
+													<xsd:element name="CaveStructure" minOccurs="0" maxOccurs="unbounded">
+														<xsd:complexType mixed="true">
+															<!-- CaveStructure Docs --><xsd:annotation><xsd:documentation><![CDATA[<br>```cpp<br>class CaveStructure {<br>&emsp;&emsp;&emsp;&emsp;std::string image_file = ""; //  path to image file that's going to be blitted<br>&emsp;&emsp;&emsp;&emsp;int count_min = 50; //   (range 0..200)<br>&emsp;&emsp;&emsp;&emsp;int count_max = 100; //   (range 0..200)<br>&emsp;&emsp;&emsp;&emsp;int aabb_min_x = 50; //   (range 0..200)<br>&emsp;&emsp;&emsp;&emsp;int aabb_min_y = 100; //   (range 0..200)<br>&emsp;&emsp;&emsp;&emsp;int aabb_max_x = 50; //   (range 0..200)<br>&emsp;&emsp;&emsp;&emsp;int aabb_max_y = 100; //   (range 0..200)<br>&emsp;&emsp;&emsp;&emsp;float strength_min = 1.5;<br>&emsp;&emsp;&emsp;&emsp;float strength_max = 1.5;<br>};<br>```<br>]]></xsd:documentation></xsd:annotation><!-- CaveStructure Docs -->
+															<!-- CaveStructure Attributes -->
+		<xsd:attribute name="image_file" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string image_file = ""; //  path to image file that's going to be blitted<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="count_min" type="xsd:int" default="50">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int count_min = 50; //   (range 0..200)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="count_max" type="xsd:int" default="100">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int count_max = 100; //   (range 0..200)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="aabb_min_x" type="xsd:int" default="50">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int aabb_min_x = 50; //   (range 0..200)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="aabb_min_y" type="xsd:int" default="100">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int aabb_min_y = 100; //   (range 0..200)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="aabb_max_x" type="xsd:int" default="50">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int aabb_max_x = 50; //   (range 0..200)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="aabb_max_y" type="xsd:int" default="100">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int aabb_max_y = 100; //   (range 0..200)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="strength_min" type="xsd:decimal" default="1.5">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float strength_min = 1.5;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="strength_max" type="xsd:decimal" default="1.5">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float strength_max = 1.5;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+<!-- CaveStructure Attributes -->
+														</xsd:complexType>
+													</xsd:element>
+												</xsd:sequence>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:all>
+									<!-- BitmapCaves Attributes -->
+		<xsd:attribute name="name" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string name = ""; //  we share these based on the names, so make them unique<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="size_x" type="xsd:int" default="512">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int size_x = 512; //  How big the image is that we generate these from<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="size_y" type="xsd:int" default="256">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int size_y = 256; //  How big the image is that we generate these from<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="spawn_percent" type="xsd:decimal" default="0.05">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float spawn_percent = 0.05; //  0-1 - with what chance do we add a spawn point to a cave<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="cave_count_min" type="xsd:int" default="50">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int cave_count_min = 50; //  generates caves n, where n = random(cave_count_min, cave_count_max) (range 0..200)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="cave_count_max" type="xsd:int" default="100">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int cave_count_max = 100; //  generates caves n, where n = random(cave_count_min, cave_count_max) (range 0..200)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="do_beginning_paths" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool do_beginning_paths = 0; //  if set, will do the paths that go down near the center of the image, used for setting up the caves to coal mines near where player starts<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="do_beginning_down" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool do_beginning_down = 0; //  if true, will do a hole straight down<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="surface_caves_count_min" type="xsd:int" default="7">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int surface_caves_count_min = 7; //  generates caves n from the surface, where n = random(surface_caves_count_min, surface_caves_count_max) (range 0..200)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="surface_caves_count_max" type="xsd:int" default="12">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int surface_caves_count_max = 12; //  generates caves n from the surface, where n = random(surface_caves_count_min, surface_caves_count_max) (range 0..200)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="cave_strength_min" type="xsd:decimal" default="0.2">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float cave_strength_min = 0.2; //  how strongly do we carve the cave<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="cave_strength_max" type="xsd:decimal" default="1.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float cave_strength_max = 1.0; //  how strongly do we carve the cave<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="cave_childs_min" type="xsd:int" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int cave_childs_min = 0; //  how many child trails a cave can have (range 0..10)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="cave_childs_max" type="xsd:int" default="2">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int cave_childs_max = 2; //  how many child trails a cave can have (range 0..10)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="surface_cave_childs_min" type="xsd:int" default="2">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int surface_cave_childs_min = 2; //  how many child trails a cave can have (range 0..10)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="surface_cave_childs_max" type="xsd:int" default="7">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int surface_cave_childs_max = 7; //  how many child trails a cave can have (range 0..10)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mountain_count_min" type="xsd:int" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int mountain_count_min = 0; //  how many child trails a cave can have (range 0..10)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mountain_count_max" type="xsd:int" default="15">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int mountain_count_max = 15; //  how many child trails a cave can have (range 0..10)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mountain_size_min" type="xsd:decimal" default="1.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float mountain_size_min = 1.0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mountain_size_max" type="xsd:decimal" default="10.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float mountain_size_max = 10.0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="blob_caves_count_min" type="xsd:int" default="20">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int blob_caves_count_min = 20; //   (range 0..50)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="blob_caves_count_max" type="xsd:int" default="55">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int blob_caves_count_max = 55; //   (range 0..100)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="blob_caves_strength_min" type="xsd:decimal" default="1.5">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float blob_caves_strength_min = 1.5; //   (range 0..50)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="blob_caves_strength_max" type="xsd:decimal" default="3.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float blob_caves_strength_max = 3.0; //   (range 0..100)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="blob_caves_radius_min" type="xsd:decimal" default="1.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float blob_caves_radius_min = 1.0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="blob_caves_radius_max" type="xsd:decimal" default="10.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float blob_caves_radius_max = 10.0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="DEBUG_output_image" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string DEBUG_output_image = ""; //  if set, will save a png of the height map to the file specified here<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+<!-- BitmapCaves Attributes -->
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="RandomMaterials" minOccurs="0">
+								<xsd:complexType mixed="true">
+									<xsd:sequence>
+										<xsd:element name="RandomColor" minOccurs="0" maxOccurs="unbounded">
+											<xsd:complexType mixed="true">
+												<!-- RandomColor Docs --><xsd:annotation><xsd:documentation><![CDATA[<br>```cpp<br>class RandomColor {<br>&emsp;&emsp;&emsp;&emsp;std::string input_color = ""; //  ARGB hex colour in the wang template to replace, e.g. FF00BBEE<br>&emsp;&emsp;&emsp;&emsp;std::string output_colors = ""; //  Comma-separated ARGB hex colours; a template pixel of input_color becomes one of these<br>};<br>```<br>]]></xsd:documentation></xsd:annotation><!-- RandomColor Docs -->
+												<!-- RandomColor Attributes -->
+		<xsd:attribute name="input_color" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string input_color = ""; //  ARGB hex colour in the wang template to replace, e.g. FF00BBEE<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="output_colors" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string output_colors = ""; //  Comma-separated ARGB hex colours; a template pixel of input_color becomes one of these<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+<!-- RandomColor Attributes -->
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="modifiers" minOccurs="0">
+								<xsd:complexType mixed="true">
+									<!-- BiomeModifiers Docs --><xsd:annotation><xsd:documentation><![CDATA[<br>```cpp<br>class BiomeModifiers {<br>&emsp;&emsp;&emsp;&emsp;float dust_amount = 0.0; //  amount of dust rendered<br>&emsp;&emsp;&emsp;&emsp;float projectile_drag_coeff = 1.0; //  projectile velocity is multiplied with this value every frame<br>&emsp;&emsp;&emsp;&emsp;float entity_gravity_y_multiplier = 1.0; //  affects the VelocityComponents gravity_y<br>&emsp;&emsp;&emsp;&emsp;int8 fog_of_war_delta = 0; //  fog of war change per frame (range -10..10)<br>&emsp;&emsp;&emsp;&emsp;uint8 fire_extinguish_chance = 0; //  probability of fire being extinguished per cell update (range 0..100)<br>&emsp;&emsp;&emsp;&emsp;uint8 reaction_freeze_chance = 0; //  probability of spontaneous freezing reactions per cell reaction update (range 0..100)<br>&emsp;&emsp;&emsp;&emsp;uint8 reaction_unfreeze_chance = 0; //  probability of spontaneous frozen material melting reactions per cell reaction update (range 0..100)<br>&emsp;&emsp;&emsp;&emsp;uint8 random_water_stains_chance = 0; //  probability of random water stains being added to characters (range 0..100)<br>&emsp;&emsp;&emsp;&emsp;uint8 random_water_stains_amount = 0; //  number of water cells added when adding random water stains (range 0..100)<br>&emsp;&emsp;&emsp;&emsp;bool everything_is_conductive = 0; //  if 1, every static material in this place conduct electricity<br>};<br>```<br>]]></xsd:documentation></xsd:annotation><!-- BiomeModifiers Docs -->
+									<!-- BiomeModifiers Attributes -->
+		<xsd:attribute name="dust_amount" type="xsd:decimal" default="0.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float dust_amount = 0.0; //  amount of dust rendered<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="projectile_drag_coeff" type="xsd:decimal" default="1.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float projectile_drag_coeff = 1.0; //  projectile velocity is multiplied with this value every frame<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="entity_gravity_y_multiplier" type="xsd:decimal" default="1.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float entity_gravity_y_multiplier = 1.0; //  affects the VelocityComponents gravity_y<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="fog_of_war_delta" type="xsd:int" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int8 fog_of_war_delta = 0; //  fog of war change per frame (range -10..10)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="fire_extinguish_chance" type="xsd:unsignedInt" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>uint8 fire_extinguish_chance = 0; //  probability of fire being extinguished per cell update (range 0..100)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="reaction_freeze_chance" type="xsd:unsignedInt" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>uint8 reaction_freeze_chance = 0; //  probability of spontaneous freezing reactions per cell reaction update (range 0..100)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="reaction_unfreeze_chance" type="xsd:unsignedInt" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>uint8 reaction_unfreeze_chance = 0; //  probability of spontaneous frozen material melting reactions per cell reaction update (range 0..100)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="random_water_stains_chance" type="xsd:unsignedInt" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>uint8 random_water_stains_chance = 0; //  probability of random water stains being added to characters (range 0..100)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="random_water_stains_amount" type="xsd:unsignedInt" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>uint8 random_water_stains_amount = 0; //  number of water cells added when adding random water stains (range 0..100)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="everything_is_conductive" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool everything_is_conductive = 0; //  if 1, every static material in this place conduct electricity<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+<!-- BiomeModifiers Attributes -->
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:all>
+						<!-- Topology Attributes -->
+		<xsd:attribute name="name" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string name = ""; //  the name that is exposed to lua functions that spawn entities. Usually a $biome_ translation key<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="type" type="BIOME_TYPE" default="BIOME_PROCEDURAL">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>BIOME_TYPE::Enum type = BIOME_PROCEDURAL; //  Generator: BIOME_PROCEDURAL (cave noise), BIOME_BITMAP (bitmap_filename), BIOME_WANG_TILE (wang_template_file)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="background_image" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string background_image = ""; //  path to the image file (texture) that is used for the background<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="background_edge_left" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string background_edge_left = ""; //  if not empty, will use this image as the left edge<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="background_edge_right" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string background_edge_right = ""; //  if not empty, will use this image as the right edge<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="background_edge_top" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string background_edge_top = ""; //  if not empty, will use this image as the top edge<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="background_edge_bottom" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string background_edge_bottom = ""; //  if not empty, will use this image as the bottom edge<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="background_edge_priority" type="xsd:int" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int background_edge_priority = 0; //  if both biomes have edges defined, will use the one with higher priority (if priority is same, will compare (>) background_images)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="background_use_neighbor" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool background_use_neighbor = 0; //  if set will look for neighboring biomes and use their background image<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="background_image_height" type="xsd:decimal" default="225.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float background_image_height = 225.0; //  height were the background image starts<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="limit_background_image" type="NoitaBool" default="1">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool limit_background_image = 1; //  Will limit the background image to start at the cave height<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="bitmap_noise_file" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string bitmap_noise_file = ""; //  if set, loads it to mBitmapNoise<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="noise_biome_edges" type="NoitaBool" default="1">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool noise_biome_edges = 1; //  does the noisy edge for biomes, if either of biomes has this set to 0 will do a straight edge<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="big_noise_biome_edges" type="NoitaBool" default="1">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool big_noise_biome_edges = 1; //  if true, will leak onto other biomes and not be carveable<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="fat_biome_edges" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool fat_biome_edges = 0; //  if true, will leak onto other biomes and not be carveable<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="skip_edge_textures" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool skip_edge_textures = 0; //  skips edge texture generation. Turn of for pixel scenes<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="audio_music_enter" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string audio_music_enter = ""; //  the music event that plays when player enters this biome (e.g. 'music/desert/enter')<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="audio_music_2" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string audio_music_2 = ""; //  the music directory that plays while player is in this biome (e.g 'coalmine')<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="audio_music_energy_coeff" type="xsd:decimal" default="1.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float audio_music_energy_coeff = 1.0; //  Multiplier for music energy in this biome<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="audio_music_no_forced_quietness" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool audio_music_no_forced_quietness = 0; //  If 1, music is not quieted by occasional quietness<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="audio_music_forced_quietness_duration_seconds" type="xsd:int" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int audio_music_forced_quietness_duration_seconds = 0; //  If > 0, this is the duration of occasional quietness, else the value from magic numbers is used.<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="audio_music_trigger_without_danger" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool audio_music_trigger_without_danger = 0; //  If 1, music is triggered in this biome no matter what the danger level is<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="audio_music_trigger_min_y" type="xsd:int" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int audio_music_trigger_min_y = 0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="audio_music_trigger_max_y" type="xsd:int" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int audio_music_trigger_max_y = 0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="audio_biome_id_for_music" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string audio_biome_id_for_music = "";<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="audio_ambience" type="xsd:string" default="cave">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string audio_ambience = "cave"; //  the ambience event that plays while player is in this biome<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="audio_ambience_surface" type="xsd:string" default="hills">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string audio_ambience_surface = "hills"; //  the ambience event that plays while player is in this biome and on surface<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="color_grading_r" type="xsd:decimal" default="1.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float color_grading_r = 1.0; //  post fx color grading<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="color_grading_g" type="xsd:decimal" default="1.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float color_grading_g = 1.0; //  post fx color grading<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="color_grading_b" type="xsd:decimal" default="1.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float color_grading_b = 1.0; //  post fx color grading<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="color_grading_grayscale" type="xsd:decimal" default="0.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float color_grading_grayscale = 0.0; //  post fx color grading. [0.0,1.0], larger value means more grayscale<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="has_rain" type="NoitaBool" default="1">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool has_rain = 1; //  if 1, rain or snowfall may occur in this biome<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="fog_of_war_type" type="FOG_OF_WAR_TYPE" default="DEFAULT">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>FOG_OF_WAR_TYPE::Enum fog_of_war_type = DEFAULT; //  the way removing fog of war works in this biome<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="gradient_sky_alpha_target_mod" type="xsd:decimal" default="0.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float gradient_sky_alpha_target_mod = 0.0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rain_target_mod" type="xsd:decimal" default="0.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float rain_target_mod = 0.0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="fog_target_mod" type="xsd:decimal" default="0.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float fog_target_mod = 0.0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="sunset_alpha_target" type="xsd:decimal" default="1.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float sunset_alpha_target = 1.0; //  affects sunset gradient amount<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="bitmap_filename" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string bitmap_filename = ""; //  loads the chunk from this bitmap, the bitmap should be 512x512<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="wang_template_file" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string wang_template_file = ""; //  uses this file to create a herringbone wang map<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="wang_map_width" type="xsd:int" default="256">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int wang_map_width = 256; //  the size of the wang map (range 1..512)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="wang_map_height" type="xsd:int" default="256">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int wang_map_height = 256; //  the size of the wang map (range 1..512)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="lua_script" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string lua_script = ""; //  default is data/scripts/biomes/NAME.lua<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="pixel_scene" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool pixel_scene = 0; //  for 'pixel scene' biomes, this forces the loading before hand<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="static_tile" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool static_tile = 0; //  if 1, directly blits wang_template_file without wang randomization, kind of like a pixel scene but at the wang tile resolution<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="static_tile_bg_mask" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string static_tile_bg_mask = ""; //  if set, and static tile is 1, the background_image will use a special shader and this mask to calculate visiblity. should be same size and resolution as 'wang_template_file'<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="static_tile_bg_mask_threshold" type="xsd:decimal" default="0.5">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float static_tile_bg_mask_threshold = 0.5; //  threshold used in 'sprite_static_tile_bg.frag' shader in conjuction with 'sprite_static_tile_bg_mask' to determine if a background pixel is visible or not<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="game_enemy_hp_scale" type="xsd:decimal" default="1.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float game_enemy_hp_scale = 1.0; //  1.f = default. Will multiply the hp of the camerabounded enemies in the area with hp_scale<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="game_enemy_attack_speed" type="xsd:decimal" default="1.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float game_enemy_attack_speed = 1.0; //  1.f = default. This multiplies AnimalAI's attack_ranged_frames_between in camerabounded enemies<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="noise_type" type="NOISE_TYPE" default="IQ2_SIMPLEX1234">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>NOISE_TYPE::Enum noise_type = IQ2_SIMPLEX1234; //  the style of the cave noise<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mInsideNoiseType" type="GENERAL_NOISE" default="SimplexNoise">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>GENERAL_NOISE::Enum mInsideNoiseType = SimplexNoise; //  the style of the inside noise<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mInsideNoiseFBM" type="NoitaBool" default="1">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool mInsideNoiseFBM = 1; //  will fbm the mInsideNoise if set true<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mInsidePerlinScaleX" type="xsd:decimal" default="1.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>double mInsidePerlinScaleX = 1.0; //  the noise inside the stones...<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mInsidePerlinScaleY" type="xsd:decimal" default="1.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>double mInsidePerlinScaleY = 1.0; //  the noise inside the stones...<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mInsidePerlinSquared" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool mInsidePerlinSquared = 0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mInsidePerlinClamped" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool mInsidePerlinClamped = 0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mInsidePerlinScaled" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool mInsidePerlinScaled = 0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mInsidePerlinScaleMin" type="xsd:decimal" default="0.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float mInsidePerlinScaleMin = 0.0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mInsidePerlinScaleMax" type="xsd:decimal" default="0.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float mInsidePerlinScaleMax = 0.0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mInsidePerlinForceInside" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool mInsidePerlinForceInside = 0; //  if set, will multiply the noise_value with the gradient value<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mInsidePerlinOffsetBySeed" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool mInsidePerlinOffsetBySeed = 0; //  NOTE( Petri ): 17.8.2023 - if set, will add worldseed as an offset to the noise<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mInsidePerlinOffsetX" type="xsd:decimal" default="0.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>double mInsidePerlinOffsetX = 0.0; //  NOTE( Petri ): 17.8.2023 - perlin noise offset<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mInsidePerlinOffsetY" type="xsd:decimal" default="0.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>double mInsidePerlinOffsetY = 0.0; //  NOTE( Petri ): 17.8.2023 - perlin noise offset<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mInsideAddValue" type="xsd:decimal" default="0.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float mInsideAddValue = 0.0; //  added inside the caves the gradient value<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mMultiplierGradient" type="xsd:decimal" default="1.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float mMultiplierGradient = 1.0; //  how much of the gradient is applied<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mMultiplierPerlin" type="xsd:decimal" default="1.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float mMultiplierPerlin = 1.0; //  how much of the inside noise<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mMultiplierExtraPerlin" type="xsd:decimal" default="1.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float mMultiplierExtraPerlin = 1.0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mGradientStartY" type="xsd:decimal" default="-512.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float mGradientStartY = -512.0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mGradientEndY" type="xsd:decimal" default="512.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float mGradientEndY = 512.0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mGradientSlopeStartX" type="xsd:decimal" default="0.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>double mGradientSlopeStartX = 0.0; //  if addNoise = 3, will use this to the ( x - mGradientSlopeStartX ) * mGradientSlopeDelta<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mGradientSlopeDelta" type="xsd:decimal" default="1.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>double mGradientSlopeDelta = 1.0; //  if addNoise = 3, will use this to the ( x - mGradientSlopeStartX ) * mGradientSlopeDelta<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mGradientAddNoise" type="xsd:int" default="1">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int mGradientAddNoise = 1; //  fake enum 1=standard noise, 2=fbm noise, 3=slope<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mGradientNoiseScale" type="xsd:decimal" default="0.01">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>double mGradientNoiseScale = 0.01;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mGradientLowNoise" type="xsd:decimal" default="-100.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float mGradientLowNoise = -100.0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mGradientHighNoise" type="xsd:decimal" default="100.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float mGradientHighNoise = 100.0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="coarse_map_force_terrain" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool coarse_map_force_terrain = 0; //  if 1, is initially marked as 'terrain' in the coarse map used for sky light calculations etc<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="coarse_map_not_terrain" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool coarse_map_not_terrain = 0; //  if 1, is initially never marked as 'terrain' in the coarse map used for sky light calculations etc<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="coarse_map_cell_count_always_zero" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool coarse_map_cell_count_always_zero = 0; //  if 1, areas in this biome always have a 64x64 cell count of 0<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="coarse_map_inject_light" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool coarse_map_inject_light = 0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+<!-- Topology Attributes -->
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="Materials" minOccurs="0">
+					<xsd:complexType mixed="true">
+						<xsd:choice minOccurs="0" maxOccurs="unbounded">
+							<xsd:element name="MaterialComponent">
+								<xsd:complexType mixed="true">
+									<!-- MaterialComponent Docs --><xsd:annotation><xsd:documentation><![CDATA[<br>```cpp<br>class MaterialComponent {<br>&emsp;&emsp;&emsp;&emsp;bool _enabled = 1; //  Generic component flag accepted on biome components; its effect here was not traced<br>&emsp;&emsp;&emsp;&emsp;std::string material_name = ""; //  The material to place<br>&emsp;&emsp;&emsp;&emsp;int material_index = 10; //  Sort key: components are tested in ascending material_index order, not XML order (range -100..100)<br>&emsp;&emsp;&emsp;&emsp;float material_min = 0.1; //  Inclusive lower bound on the cave noise value<br>&emsp;&emsp;&emsp;&emsp;float material_max = 0.1; //  Exclusive upper bound on the cave noise value<br>&emsp;&emsp;&emsp;&emsp;bool add_perlin = 0; //  Add perlin(x * add_perlin_scale_x, 0) to the value before the range test<br>&emsp;&emsp;&emsp;&emsp;float add_perlin_scale_x = 1.0; //  Scale for the add_perlin noise<br>&emsp;&emsp;&emsp;&emsp;float add_perlin_scale_y = 1.0; //  Parsed but never read: the perlin's second argument is always 0<br>&emsp;&emsp;&emsp;&emsp;bool is_rare = 0; //  Enables the rare_* gates; 0 skips them entirely<br>&emsp;&emsp;&emsp;&emsp;bool limit_y = 0; //  Only place between limit_min_y and limit_max_y<br>&emsp;&emsp;&emsp;&emsp;float limit_min_y = 100.0; //  Inclusive lower bound on pixel y, used with limit_y<br>&emsp;&emsp;&emsp;&emsp;float limit_max_y = 2048.0; //  Inclusive upper bound on pixel y, used with limit_y<br>&emsp;&emsp;&emsp;&emsp;bool rare_use_perlin = 0;<br>&emsp;&emsp;&emsp;&emsp;bool rare_use_fbm_perlin = 0; //  Use fbm instead of plain perlin for the rare gate<br>&emsp;&emsp;&emsp;&emsp;bool rare_use_polka = 1;<br>&emsp;&emsp;&emsp;&emsp;float rare_scale_x = 0.05;<br>&emsp;&emsp;&emsp;&emsp;float rare_scale_y = 0.05;<br>&emsp;&emsp;&emsp;&emsp;bool rare_offset_by_seed = 0; //  if set, will add worldseed to x,y<br>&emsp;&emsp;&emsp;&emsp;float rare_offset_x = 0.0; //  adds this offset before calling the noise functions<br>&emsp;&emsp;&emsp;&emsp;float rare_offset_y = 0.0; //  adds this offset before calling the noise functions<br>&emsp;&emsp;&emsp;&emsp;float rare_polka_radius_low = 0.2;<br>&emsp;&emsp;&emsp;&emsp;float rare_polka_radius_high = 0.65;<br>&emsp;&emsp;&emsp;&emsp;bool rare_polka_is_boxed = 1;<br>&emsp;&emsp;&emsp;&emsp;float rare_polka_probability = 0.2;<br>&emsp;&emsp;&emsp;&emsp;float rare_required_min = 0.2; //  Exclusive lower bound for both rare gates<br>&emsp;&emsp;&emsp;&emsp;float rare_required_max = 1.0; //  Inclusive upper bound for both rare gates<br>&emsp;&emsp;&emsp;&emsp;bool is_polygon = 0; //  If 1, uses the points of the <polygon> child to decide whether this material is placed<br>};<br>```<br>]]></xsd:documentation></xsd:annotation><!-- MaterialComponent Docs -->
+									<xsd:all>
+										<xsd:element name="polygon" minOccurs="0">
+											<xsd:complexType mixed="true">
+												<xsd:sequence>
+													<xsd:element name="Vec2" minOccurs="0" maxOccurs="unbounded">
+														<xsd:complexType>
+															<xsd:attribute name="x" type="xsd:decimal" default="0" />
+															<xsd:attribute name="y" type="xsd:decimal" default="0" />
+														</xsd:complexType>
+													</xsd:element>
+												</xsd:sequence>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:all>
+									<!-- MaterialComponent Attributes -->
+		<xsd:attribute name="_enabled" type="NoitaBool" default="1">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool _enabled = 1; //  Generic component flag accepted on biome components; its effect here was not traced<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="material_name" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string material_name = ""; //  The material to place<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="material_index" type="xsd:int" default="10">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int material_index = 10; //  Sort key: components are tested in ascending material_index order, not XML order (range -100..100)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="material_min" type="xsd:decimal" default="0.1">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float material_min = 0.1; //  Inclusive lower bound on the cave noise value<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="material_max" type="xsd:decimal" default="0.1">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float material_max = 0.1; //  Exclusive upper bound on the cave noise value<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="add_perlin" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool add_perlin = 0; //  Add perlin(x * add_perlin_scale_x, 0) to the value before the range test<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="add_perlin_scale_x" type="xsd:decimal" default="1.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float add_perlin_scale_x = 1.0; //  Scale for the add_perlin noise<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="add_perlin_scale_y" type="xsd:decimal" default="1.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float add_perlin_scale_y = 1.0; //  Parsed but never read: the perlin's second argument is always 0<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="is_rare" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool is_rare = 0; //  Enables the rare_* gates; 0 skips them entirely<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="limit_y" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool limit_y = 0; //  Only place between limit_min_y and limit_max_y<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="limit_min_y" type="xsd:decimal" default="100.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float limit_min_y = 100.0; //  Inclusive lower bound on pixel y, used with limit_y<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="limit_max_y" type="xsd:decimal" default="2048.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float limit_max_y = 2048.0; //  Inclusive upper bound on pixel y, used with limit_y<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rare_use_perlin" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool rare_use_perlin = 0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rare_use_fbm_perlin" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool rare_use_fbm_perlin = 0; //  Use fbm instead of plain perlin for the rare gate<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rare_use_polka" type="NoitaBool" default="1">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool rare_use_polka = 1;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rare_scale_x" type="xsd:decimal" default="0.05">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float rare_scale_x = 0.05;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rare_scale_y" type="xsd:decimal" default="0.05">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float rare_scale_y = 0.05;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rare_offset_by_seed" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool rare_offset_by_seed = 0; //  if set, will add worldseed to x,y<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rare_offset_x" type="xsd:decimal" default="0.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float rare_offset_x = 0.0; //  adds this offset before calling the noise functions<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rare_offset_y" type="xsd:decimal" default="0.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float rare_offset_y = 0.0; //  adds this offset before calling the noise functions<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rare_polka_radius_low" type="xsd:decimal" default="0.2">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float rare_polka_radius_low = 0.2;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rare_polka_radius_high" type="xsd:decimal" default="0.65">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float rare_polka_radius_high = 0.65;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rare_polka_is_boxed" type="NoitaBool" default="1">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool rare_polka_is_boxed = 1;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rare_polka_probability" type="xsd:decimal" default="0.2">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float rare_polka_probability = 0.2;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rare_required_min" type="xsd:decimal" default="0.2">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float rare_required_min = 0.2; //  Exclusive lower bound for both rare gates<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rare_required_max" type="xsd:decimal" default="1.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float rare_required_max = 1.0; //  Inclusive upper bound for both rare gates<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="is_polygon" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool is_polygon = 0; //  If 1, uses the points of the <polygon> child to decide whether this material is placed<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+<!-- MaterialComponent Attributes -->
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="VegetationComponent">
+								<xsd:complexType mixed="true">
+									<!-- VegetationComponent Docs --><xsd:annotation><xsd:documentation><![CDATA[<br>```cpp<br>class VegetationComponent {<br>&emsp;&emsp;&emsp;&emsp;bool _enabled = 1; //  Generic component flag accepted on biome components; its effect here was not traced<br>&emsp;&emsp;&emsp;&emsp;bool is_visual = 0;<br>&emsp;&emsp;&emsp;&emsp;bool is_real_pixels = 0;<br>&emsp;&emsp;&emsp;&emsp;bool is_grass = 0;<br>&emsp;&emsp;&emsp;&emsp;bool is_ceiling_plant = 0;<br>&emsp;&emsp;&emsp;&emsp;bool check_safety = 0; //  if set, will check the 4 corners for safty<br>&emsp;&emsp;&emsp;&emsp;float rand_seed = 1234.0; //  uses this to randomize the positions<br>&emsp;&emsp;&emsp;&emsp;float tree_width = 120.0;<br>&emsp;&emsp;&emsp;&emsp;float tree_radius_low = 0.3;<br>&emsp;&emsp;&emsp;&emsp;float tree_radius_high = 0.7; //  within the tree width what's the max distance (1) all the way to right<br>&emsp;&emsp;&emsp;&emsp;float tree_probability = 0.7; //  what's the probability of a tree being spawned in a tree_width section<br>&emsp;&emsp;&emsp;&emsp;bool is_rare = 0; //  if true, the tree is spawned only 1/3 of cases<br>&emsp;&emsp;&emsp;&emsp;int tree_extra_y = 2; //  if is_visual is true, then this will move it down by this much (range 0..50)<br>&emsp;&emsp;&emsp;&emsp;std::string tree_image_file = "";<br>&emsp;&emsp;&emsp;&emsp;std::string tree_image_visual = "";<br>&emsp;&emsp;&emsp;&emsp;std::string tree_material = "wood";<br>&emsp;&emsp;&emsp;&emsp;std::string load_this_xml_instead = "";<br>&emsp;&emsp;&emsp;&emsp;float visual_offset_x = 0.0;<br>&emsp;&emsp;&emsp;&emsp;float visual_offset_y = 0.0;<br>&emsp;&emsp;&emsp;&emsp;std::string visual_color = "0xFFFFFF"; //  is_visual=1, the color of the single cell that is created for the plant<br>&emsp;&emsp;&emsp;&emsp;bool grass_requires_neighbors = 0;<br>&emsp;&emsp;&emsp;&emsp;std::string material_on_top_of = "";<br>&emsp;&emsp;&emsp;&emsp;bool height_check = 0; //  if != 0 will check that there is air up to this height<br>&emsp;&emsp;&emsp;&emsp;float max_y = 99999; //  this is the max y that the plant / tree can be placed<br>&emsp;&emsp;&emsp;&emsp;bool random_flip_x_scale = 0; //  if true, has 50% chance of being flipped horizontally<br>};<br>```<br>]]></xsd:documentation></xsd:annotation><!-- VegetationComponent Docs -->
+									<!-- VegetationComponent Attributes -->
+		<xsd:attribute name="_enabled" type="NoitaBool" default="1">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool _enabled = 1; //  Generic component flag accepted on biome components; its effect here was not traced<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="is_visual" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool is_visual = 0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="is_real_pixels" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool is_real_pixels = 0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="is_grass" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool is_grass = 0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="is_ceiling_plant" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool is_ceiling_plant = 0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="check_safety" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool check_safety = 0; //  if set, will check the 4 corners for safty<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rand_seed" type="xsd:decimal" default="1234.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float rand_seed = 1234.0; //  uses this to randomize the positions<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="tree_width" type="xsd:decimal" default="120.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float tree_width = 120.0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="tree_radius_low" type="xsd:decimal" default="0.3">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float tree_radius_low = 0.3;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="tree_radius_high" type="xsd:decimal" default="0.7">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float tree_radius_high = 0.7; //  within the tree width what's the max distance (1) all the way to right<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="tree_probability" type="xsd:decimal" default="0.7">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float tree_probability = 0.7; //  what's the probability of a tree being spawned in a tree_width section<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="is_rare" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool is_rare = 0; //  if true, the tree is spawned only 1/3 of cases<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="tree_extra_y" type="xsd:int" default="2">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int tree_extra_y = 2; //  if is_visual is true, then this will move it down by this much (range 0..50)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="tree_image_file" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string tree_image_file = "";<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="tree_image_visual" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string tree_image_visual = "";<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="tree_material" type="xsd:string" default="wood">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string tree_material = "wood";<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="load_this_xml_instead" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string load_this_xml_instead = "";<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="visual_offset_x" type="xsd:decimal" default="0.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float visual_offset_x = 0.0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="visual_offset_y" type="xsd:decimal" default="0.0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float visual_offset_y = 0.0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="visual_color" type="xsd:string" default="0xFFFFFF">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string visual_color = "0xFFFFFF"; //  is_visual=1, the color of the single cell that is created for the plant<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="grass_requires_neighbors" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool grass_requires_neighbors = 0;<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="material_on_top_of" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string material_on_top_of = "";<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="height_check" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool height_check = 0; //  if != 0 will check that there is air up to this height<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="max_y" type="xsd:decimal" default="99999">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float max_y = 99999; //  this is the max y that the plant / tree can be placed<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="random_flip_x_scale" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool random_flip_x_scale = 0; //  if true, has 50% chance of being flipped horizontally<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+<!-- VegetationComponent Attributes -->
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="FossilComponent">
+								<xsd:complexType mixed="true">
+									<!-- FossilComponent Docs --><xsd:annotation><xsd:documentation><![CDATA[<br>```cpp<br>class FossilComponent {<br>&emsp;&emsp;&emsp;&emsp;bool _enabled = 1; //  Generic component flag accepted on biome components; its effect here was not traced<br>&emsp;&emsp;&emsp;&emsp;int count_min = 0; //  Minimum number of stamps<br>&emsp;&emsp;&emsp;&emsp;int count_max = 0; //  Maximum number of stamps<br>&emsp;&emsp;&emsp;&emsp;int seed = 1; //  Random seed for placement<br>&emsp;&emsp;&emsp;&emsp;std::string material = "bone"; //  Material the image is stamped in<br>&emsp;&emsp;&emsp;&emsp;std::string image_file = ""; //  Image stamped into the terrain<br>};<br>```<br>]]></xsd:documentation></xsd:annotation><!-- FossilComponent Docs -->
+									<!-- FossilComponent Attributes -->
+		<xsd:attribute name="_enabled" type="NoitaBool" default="1">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool _enabled = 1; //  Generic component flag accepted on biome components; its effect here was not traced<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="count_min" type="xsd:int" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int count_min = 0; //  Minimum number of stamps<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="count_max" type="xsd:int" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int count_max = 0; //  Maximum number of stamps<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="seed" type="xsd:int" default="1">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int seed = 1; //  Random seed for placement<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="material" type="xsd:string" default="bone">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string material = "bone"; //  Material the image is stamped in<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="image_file" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string image_file = ""; //  Image stamped into the terrain<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+<!-- FossilComponent Attributes -->
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:attribute name="name" type="xsd:string" default="">
+							<xsd:annotation>
+								<xsd:documentation><![CDATA[Name of the material set. The only attribute read on `<Materials>`.]]></xsd:documentation>
+							</xsd:annotation>
+						</xsd:attribute>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:all>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

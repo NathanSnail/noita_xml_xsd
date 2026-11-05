@@ -1,0 +1,14 @@
+[
+	{
+		"name": "input_color",
+		"type": "std::string",
+		"default": "",
+		"doc": "ARGB hex colour in the wang template to replace, e.g. FF00BBEE"
+	},
+	{
+		"name": "output_colors",
+		"type": "std::string",
+		"default": "",
+		"doc": "Comma-separated ARGB hex colours; a template pixel of input_color becomes one of these"
+	}
+]

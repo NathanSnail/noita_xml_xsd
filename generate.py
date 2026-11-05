@@ -680,6 +680,25 @@ apply_replacements(
     },
 )
 
+biome_parts = {
+    "Topology": render_json("biome_topology", "Biome"),
+    "BitmapCaves": render_json("biome_caves", "CavesSetup"),
+    "CaveStructure": render_json("biome_cavestructure", "CaveStructure"),
+    "BiomeModifiers": render_json("biome_modifiers", "BiomeModifiers"),
+    "RandomColor": render_json("biome_randomcolor", "RandomColor"),
+    "MaterialComponent": render_json("biome_material", "MaterialComponent"),
+    "VegetationComponent": render_json("biome_vegetation", "VegetationComponent"),
+    "FossilComponent": render_json("biome_fossil", "FossilComponent"),
+}
+apply_replacements(
+    "biome",
+    {
+        f"{name} {kind}": getattr(part, kind.lower())
+        for name, part in biome_parts.items()
+        for kind in ("Attributes", "Docs")
+    },
+)
+
 magic_replacements = render_json("magic_numbers", "MagicNumbers")
 apply_replacements(
     "magic_numbers",

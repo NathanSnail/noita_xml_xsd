@@ -1,0 +1,164 @@
+[
+	{
+		"name": "_enabled",
+		"type": "bool",
+		"default": "1",
+		"doc": "Generic component flag accepted on biome components; its effect here was not traced"
+	},
+	{
+		"name": "material_name",
+		"type": "std::string",
+		"default": "",
+		"doc": "The material to place"
+	},
+	{
+		"name": "material_index",
+		"type": "int",
+		"default": "10",
+		"doc": "Sort key: components are tested in ascending material_index order, not XML order (range -100..100)"
+	},
+	{
+		"name": "material_min",
+		"type": "float",
+		"default": "0.1",
+		"doc": "Inclusive lower bound on the cave noise value"
+	},
+	{
+		"name": "material_max",
+		"type": "float",
+		"default": "0.1",
+		"doc": "Exclusive upper bound on the cave noise value"
+	},
+	{
+		"name": "add_perlin",
+		"type": "bool",
+		"default": "0",
+		"doc": "Add perlin(x * add_perlin_scale_x, 0) to the value before the range test"
+	},
+	{
+		"name": "add_perlin_scale_x",
+		"type": "float",
+		"default": "1.0",
+		"doc": "Scale for the add_perlin noise"
+	},
+	{
+		"name": "add_perlin_scale_y",
+		"type": "float",
+		"default": "1.0",
+		"doc": "Parsed but never read: the perlin's second argument is always 0"
+	},
+	{
+		"name": "is_rare",
+		"type": "bool",
+		"default": "0",
+		"doc": "Enables the rare_* gates; 0 skips them entirely"
+	},
+	{
+		"name": "limit_y",
+		"type": "bool",
+		"default": "0",
+		"doc": "Only place between limit_min_y and limit_max_y"
+	},
+	{
+		"name": "limit_min_y",
+		"type": "float",
+		"default": "100.0",
+		"doc": "Inclusive lower bound on pixel y, used with limit_y"
+	},
+	{
+		"name": "limit_max_y",
+		"type": "float",
+		"default": "2048.0",
+		"doc": "Inclusive upper bound on pixel y, used with limit_y"
+	},
+	{
+		"name": "rare_use_perlin",
+		"type": "bool",
+		"default": "0",
+		"doc": ""
+	},
+	{
+		"name": "rare_use_fbm_perlin",
+		"type": "bool",
+		"default": "0",
+		"doc": "Use fbm instead of plain perlin for the rare gate"
+	},
+	{
+		"name": "rare_use_polka",
+		"type": "bool",
+		"default": "1",
+		"doc": ""
+	},
+	{
+		"name": "rare_scale_x",
+		"type": "float",
+		"default": "0.05",
+		"doc": ""
+	},
+	{
+		"name": "rare_scale_y",
+		"type": "float",
+		"default": "0.05",
+		"doc": ""
+	},
+	{
+		"name": "rare_offset_by_seed",
+		"type": "bool",
+		"default": "0",
+		"doc": "if set, will add worldseed to x,y"
+	},
+	{
+		"name": "rare_offset_x",
+		"type": "float",
+		"default": "0.0",
+		"doc": "adds this offset before calling the noise functions"
+	},
+	{
+		"name": "rare_offset_y",
+		"type": "float",
+		"default": "0.0",
+		"doc": "adds this offset before calling the noise functions"
+	},
+	{
+		"name": "rare_polka_radius_low",
+		"type": "float",
+		"default": "0.2",
+		"doc": ""
+	},
+	{
+		"name": "rare_polka_radius_high",
+		"type": "float",
+		"default": "0.65",
+		"doc": ""
+	},
+	{
+		"name": "rare_polka_is_boxed",
+		"type": "bool",
+		"default": "1",
+		"doc": ""
+	},
+	{
+		"name": "rare_polka_probability",
+		"type": "float",
+		"default": "0.2",
+		"doc": ""
+	},
+	{
+		"name": "rare_required_min",
+		"type": "float",
+		"default": "0.2",
+		"doc": "Exclusive lower bound for both rare gates"
+	},
+	{
+		"name": "rare_required_max",
+		"type": "float",
+		"default": "1.0",
+		"doc": "Inclusive upper bound for both rare gates"
+	},
+	{
+		"name": "is_polygon",
+		"type": "bool",
+		"default": "0",
+		"doc": "If 1, uses the points of the <polygon> child to decide whether this material is placed"
+	}
+]

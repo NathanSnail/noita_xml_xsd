@@ -1,0 +1,160 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<!--Builtin-->
+	<xsd:simpleType name="NoitaBool">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="0" />
+			<xsd:enumeration value="1" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="BIOME_TYPE">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="BIOME_PROCEDURAL" />
+			<xsd:enumeration value="BIOME_BITMAP" />
+			<xsd:enumeration value="BIOME_WANG_TILE" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="FOG_OF_WAR_TYPE">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="DEFAULT" />
+			<xsd:enumeration value="HEAVY_CLEAR_AT_PLAYER" />
+			<xsd:enumeration value="HEAVY_CLEAR_WITH_MAGIC" />
+			<xsd:enumeration value="HEAVY_NO_CLEAR" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="NOISE_TYPE">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="IQ2_SIMPLEX1234" />
+			<xsd:enumeration value="IQ_SIMPLEX" />
+			<xsd:enumeration value="SIN_CAPPED_EVERYTHING" />
+			<xsd:enumeration value="SIN_CAPPED_SIMPLEX" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="GENERAL_NOISE">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="IQNoise" />
+			<xsd:enumeration value="DirtyPeeNoise" />
+			<xsd:enumeration value="QemNoise" />
+			<xsd:enumeration value="WhiteNoise" />
+			<xsd:enumeration value="MixNoise" />
+			<xsd:enumeration value="SimplexNoise" />
+			<xsd:enumeration value="STB_Perlin" />
+			<xsd:enumeration value="FastBlockNoise" />
+			<xsd:enumeration value="SimplexNoise1234" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!--Builtin-->
+	<xsd:element name="Biome">
+		<xsd:complexType mixed="true">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[A biome file. The game reads exactly two children: `<Topology>` (shape, background, audio) and `<Materials>` (what fills it). Anything else is ignored.]]></xsd:documentation>
+			</xsd:annotation>
+			<xsd:all>
+				<xsd:element name="Topology" minOccurs="0">
+					<xsd:complexType mixed="true">
+						<!-- Topology Docs -->
+						<!-- Topology Docs -->
+						<xsd:all>
+							<xsd:element name="BitmapCaves" minOccurs="0">
+								<xsd:complexType mixed="true">
+									<!-- BitmapCaves Docs -->
+									<!-- BitmapCaves Docs -->
+									<xsd:all>
+										<xsd:element name="structures" minOccurs="0">
+											<xsd:complexType mixed="true">
+												<xsd:sequence>
+													<xsd:element name="CaveStructure" minOccurs="0" maxOccurs="unbounded">
+														<xsd:complexType mixed="true">
+															<!-- CaveStructure Docs -->
+															<!-- CaveStructure Docs -->
+															<!-- CaveStructure Attributes -->
+															<!-- CaveStructure Attributes -->
+														</xsd:complexType>
+													</xsd:element>
+												</xsd:sequence>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:all>
+									<!-- BitmapCaves Attributes -->
+									<!-- BitmapCaves Attributes -->
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="RandomMaterials" minOccurs="0">
+								<xsd:complexType mixed="true">
+									<xsd:sequence>
+										<xsd:element name="RandomColor" minOccurs="0" maxOccurs="unbounded">
+											<xsd:complexType mixed="true">
+												<!-- RandomColor Docs -->
+												<!-- RandomColor Docs -->
+												<!-- RandomColor Attributes -->
+												<!-- RandomColor Attributes -->
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="modifiers" minOccurs="0">
+								<xsd:complexType mixed="true">
+									<!-- BiomeModifiers Docs -->
+									<!-- BiomeModifiers Docs -->
+									<!-- BiomeModifiers Attributes -->
+									<!-- BiomeModifiers Attributes -->
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:all>
+						<!-- Topology Attributes -->
+						<!-- Topology Attributes -->
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="Materials" minOccurs="0">
+					<xsd:complexType mixed="true">
+						<xsd:choice minOccurs="0" maxOccurs="unbounded">
+							<xsd:element name="MaterialComponent">
+								<xsd:complexType mixed="true">
+									<!-- MaterialComponent Docs -->
+									<!-- MaterialComponent Docs -->
+									<xsd:all>
+										<xsd:element name="polygon" minOccurs="0">
+											<xsd:complexType mixed="true">
+												<xsd:sequence>
+													<xsd:element name="Vec2" minOccurs="0" maxOccurs="unbounded">
+														<xsd:complexType>
+															<xsd:attribute name="x" type="xsd:decimal" default="0" />
+															<xsd:attribute name="y" type="xsd:decimal" default="0" />
+														</xsd:complexType>
+													</xsd:element>
+												</xsd:sequence>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:all>
+									<!-- MaterialComponent Attributes -->
+									<!-- MaterialComponent Attributes -->
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="VegetationComponent">
+								<xsd:complexType mixed="true">
+									<!-- VegetationComponent Docs -->
+									<!-- VegetationComponent Docs -->
+									<!-- VegetationComponent Attributes -->
+									<!-- VegetationComponent Attributes -->
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="FossilComponent">
+								<xsd:complexType mixed="true">
+									<!-- FossilComponent Docs -->
+									<!-- FossilComponent Docs -->
+									<!-- FossilComponent Attributes -->
+									<!-- FossilComponent Attributes -->
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:attribute name="name" type="xsd:string" default="">
+							<xsd:annotation>
+								<xsd:documentation><![CDATA[Name of the material set. The only attribute read on `<Materials>`.]]></xsd:documentation>
+							</xsd:annotation>
+						</xsd:attribute>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:all>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
