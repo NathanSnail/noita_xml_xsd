@@ -1,0 +1,149 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<!--Builtin-->
+	<xsd:simpleType name="NoitaBool">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="0" />
+			<xsd:enumeration value="1" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!--Builtin-->
+	<xsd:complexType name="PixelSceneEntry" mixed="true">
+		<!-- PixelScene Docs --><xsd:annotation><xsd:documentation><![CDATA[<br>```cpp<br>class PixelScene {<br>&emsp;&emsp;&emsp;&emsp;int pos_x = 0; //  Absolute world x of the scene's top-left corner, in pixels<br>&emsp;&emsp;&emsp;&emsp;int pos_y = 0; //  Absolute world y of the scene's top-left corner, in pixels<br>&emsp;&emsp;&emsp;&emsp;std::string material_filename = ""; //  Material image (.png or .plz) whose colours become cell materials. May be empty when just_load_an_entity is used<br>&emsp;&emsp;&emsp;&emsp;std::string colors_filename = ""; //  Visual image laid over the materials<br>&emsp;&emsp;&emsp;&emsp;std::string background_filename = ""; //  Image drawn behind the terrain<br>&emsp;&emsp;&emsp;&emsp;int background_z_index = 50; //  Draw order of background_filename<br>&emsp;&emsp;&emsp;&emsp;bool skip_biome_checks = 0; //  Place the scene even where the biome does not match<br>&emsp;&emsp;&emsp;&emsp;bool skip_edge_textures = 0; //  Skip edge-texture generation around the scene<br>&emsp;&emsp;&emsp;&emsp;std::string just_load_an_entity = ""; //  Entity file to spawn at pos_x/pos_y instead of (or as well as) stamping images<br>&emsp;&emsp;&emsp;&emsp;bool clean_area_before = 0; //  Erase the scene's rectangle before stamping it<br>&emsp;&emsp;&emsp;&emsp;bool DEBUG_RELOAD_ME = 0; //  Debug flag<br>};<br>```<br>]]></xsd:documentation></xsd:annotation><!-- PixelScene Docs -->
+		<xsd:all>
+			<xsd:element name="ColorsToMaterial" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Read by the game as a list of `<CM>` entries (colour -> material overrides). The entry format is not documented here and no known file uses it, so its content is not checked.]]></xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType mixed="true">
+					<xsd:sequence>
+						<xsd:any minOccurs="0" maxOccurs="unbounded" processContents="skip" />
+					</xsd:sequence>
+					<xsd:anyAttribute processContents="skip" />
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:all>
+		<!-- PixelScene Attributes -->
+		<xsd:attribute name="pos_x" type="xsd:int" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int pos_x = 0; //  Absolute world x of the scene's top-left corner, in pixels<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="pos_y" type="xsd:int" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int pos_y = 0; //  Absolute world y of the scene's top-left corner, in pixels<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="material_filename" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string material_filename = ""; //  Material image (.png or .plz) whose colours become cell materials. May be empty when just_load_an_entity is used<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="colors_filename" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string colors_filename = ""; //  Visual image laid over the materials<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="background_filename" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string background_filename = ""; //  Image drawn behind the terrain<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="background_z_index" type="xsd:int" default="50">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int background_z_index = 50; //  Draw order of background_filename<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="skip_biome_checks" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool skip_biome_checks = 0; //  Place the scene even where the biome does not match<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="skip_edge_textures" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool skip_edge_textures = 0; //  Skip edge-texture generation around the scene<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="just_load_an_entity" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string just_load_an_entity = ""; //  Entity file to spawn at pos_x/pos_y instead of (or as well as) stamping images<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="clean_area_before" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool clean_area_before = 0; //  Erase the scene's rectangle before stamping it<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="DEBUG_RELOAD_ME" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool DEBUG_RELOAD_ME = 0; //  Debug flag<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+<!-- PixelScene Attributes -->
+	</xsd:complexType>
+	<xsd:complexType name="PixelSceneList" mixed="true">
+		<xsd:sequence>
+			<xsd:element name="PixelScene" type="PixelSceneEntry" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="PixelScenes">
+		<xsd:complexType mixed="true">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[A pixel-scene list, e.g. `data/biome/_pixel_scenes.xml`. Every child is optional and they may come in any order.]]></xsd:documentation>
+			</xsd:annotation>
+			<xsd:all>
+				<xsd:element name="PixelSceneFiles" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[More pixel-scene files to load; each is parsed as another `<PixelScenes>` file.]]></xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType mixed="true">
+						<xsd:sequence>
+							<xsd:element name="File" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation><![CDATA[Path to another `<PixelScenes>` file, as element text.]]></xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="BackgroundImages" minOccurs="0">
+					<xsd:complexType mixed="true">
+						<xsd:sequence>
+							<xsd:element name="Image" minOccurs="0" maxOccurs="unbounded">
+								<xsd:complexType mixed="true">
+									<!-- Image Docs --><xsd:annotation><xsd:documentation><![CDATA[<br>```cpp<br>class BackgroundImage {<br>&emsp;&emsp;&emsp;&emsp;std::string filename = ""; //  Background image to place<br>&emsp;&emsp;&emsp;&emsp;int x = 0; //  Absolute world x, in pixels<br>&emsp;&emsp;&emsp;&emsp;int y = 0; //  Absolute world y, in pixels<br>};<br>```<br>]]></xsd:documentation></xsd:annotation><!-- Image Docs -->
+									<!-- Image Attributes -->
+		<xsd:attribute name="filename" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string filename = ""; //  Background image to place<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="x" type="xsd:int" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int x = 0; //  Absolute world x, in pixels<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="y" type="xsd:int" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int y = 0; //  Absolute world y, in pixels<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+<!-- Image Attributes -->
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="mBufferedPixelScenes" type="PixelSceneList" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[Scenes to place. They are queued and stamped when their area is generated.]]></xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="mOldPixelScenes" type="PixelSceneList" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[Scenes the game has finished with. Written in save files; in a data file they are recorded as done and not stamped.]]></xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:all>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

@@ -1,0 +1,81 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<!--Builtin-->
+	<xsd:simpleType name="NoitaBool">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="0" />
+			<xsd:enumeration value="1" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!--Builtin-->
+	<xsd:complexType name="PixelSceneEntry" mixed="true">
+		<!-- PixelScene Docs -->
+		<!-- PixelScene Docs -->
+		<xsd:all>
+			<xsd:element name="ColorsToMaterial" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Read by the game as a list of `<CM>` entries (colour -> material overrides). The entry format is not documented here and no known file uses it, so its content is not checked.]]></xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType mixed="true">
+					<xsd:sequence>
+						<xsd:any minOccurs="0" maxOccurs="unbounded" processContents="skip" />
+					</xsd:sequence>
+					<xsd:anyAttribute processContents="skip" />
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:all>
+		<!-- PixelScene Attributes -->
+		<!-- PixelScene Attributes -->
+	</xsd:complexType>
+	<xsd:complexType name="PixelSceneList" mixed="true">
+		<xsd:sequence>
+			<xsd:element name="PixelScene" type="PixelSceneEntry" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="PixelScenes">
+		<xsd:complexType mixed="true">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[A pixel-scene list, e.g. `data/biome/_pixel_scenes.xml`. Every child is optional and they may come in any order.]]></xsd:documentation>
+			</xsd:annotation>
+			<xsd:all>
+				<xsd:element name="PixelSceneFiles" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[More pixel-scene files to load; each is parsed as another `<PixelScenes>` file.]]></xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType mixed="true">
+						<xsd:sequence>
+							<xsd:element name="File" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+								<xsd:annotation>
+									<xsd:documentation><![CDATA[Path to another `<PixelScenes>` file, as element text.]]></xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="BackgroundImages" minOccurs="0">
+					<xsd:complexType mixed="true">
+						<xsd:sequence>
+							<xsd:element name="Image" minOccurs="0" maxOccurs="unbounded">
+								<xsd:complexType mixed="true">
+									<!-- Image Docs -->
+									<!-- Image Docs -->
+									<!-- Image Attributes -->
+									<!-- Image Attributes -->
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="mBufferedPixelScenes" type="PixelSceneList" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[Scenes to place. They are queued and stamped when their area is generated.]]></xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="mOldPixelScenes" type="PixelSceneList" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation><![CDATA[Scenes the game has finished with. Written in save files; in a data file they are recorded as done and not stamped.]]></xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:all>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

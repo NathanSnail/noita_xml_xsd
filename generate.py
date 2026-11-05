@@ -699,6 +699,19 @@ apply_replacements(
     },
 )
 
+pixel_scene_parts = {
+    "PixelScene": render_json("pixel_scene", "PixelScene"),
+    "Image": render_json("pixel_scene_image", "BackgroundImage"),
+}
+apply_replacements(
+    "pixel_scenes",
+    {
+        f"{name} {kind}": getattr(part, kind.lower())
+        for name, part in pixel_scene_parts.items()
+        for kind in ("Attributes", "Docs")
+    },
+)
+
 magic_replacements = render_json("magic_numbers", "MagicNumbers")
 apply_replacements(
     "magic_numbers",
