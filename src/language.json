@@ -1,0 +1,80 @@
+[
+	{
+		"name": "key",
+		"type": "std::string",
+		"default": "",
+		"doc": "Language id, e.g. fi-es. The shipped data/translations/*.xml omit it because the game already knows their id; a translation mod sets it"
+	},
+	{
+		"name": "name",
+		"type": "std::string",
+		"default": "",
+		"doc": "Name shown in the language list"
+	},
+	{
+		"name": "font_default",
+		"type": "std::string",
+		"default": "",
+		"doc": "Font file (.xml or .bin) for general UI text"
+	},
+	{
+		"name": "font_inventory_title",
+		"type": "std::string",
+		"default": "",
+		"doc": "Font file for inventory titles"
+	},
+	{
+		"name": "font_important_message_title",
+		"type": "std::string",
+		"default": "",
+		"doc": "Font file for large on-screen message titles"
+	},
+	{
+		"name": "font_world_space_message",
+		"type": "std::string",
+		"default": "",
+		"doc": "Font file for text drawn in the world"
+	},
+	{
+		"name": "fonts_utf8",
+		"type": "bool",
+		"default": "0",
+		"doc": "UTF-8 font flag. Every shipped language sets 1"
+	},
+	{
+		"name": "fonts_pixel_font",
+		"type": "bool",
+		"default": "0",
+		"doc": "Pixel-font flag. Shipped Latin/Cyrillic languages set 1; CJK languages using the generated Noto fonts omit it"
+	},
+	{
+		"name": "fonts_dpi",
+		"type": "float",
+		"default": "1",
+		"doc": "Font DPI value. No shipped file sets it"
+	},
+	{
+		"name": "ui_wand_info_offset1",
+		"type": "float",
+		"default": "0",
+		"doc": "Per-language UI offset in the wand info box (first value)"
+	},
+	{
+		"name": "ui_wand_info_offset2",
+		"type": "float",
+		"default": "0",
+		"doc": "Per-language UI offset in the wand info box (second value)"
+	},
+	{
+		"name": "ui_action_info_offset2",
+		"type": "float",
+		"default": "0",
+		"doc": "Per-language UI offset in the spell info box"
+	},
+	{
+		"name": "ui_configurecontrols_offset2",
+		"type": "float",
+		"default": "0",
+		"doc": "Per-language UI offset in the Configure Controls screen"
+	}
+]

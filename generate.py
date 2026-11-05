@@ -712,6 +712,12 @@ apply_replacements(
     },
 )
 
+language_replacements = render_json("language", "Language")
+apply_replacements(
+    "language",
+    {"Language Attributes": language_replacements.attributes, "Language Docs": language_replacements.docs},
+)
+
 magic_replacements = render_json("magic_numbers", "MagicNumbers")
 apply_replacements(
     "magic_numbers",
