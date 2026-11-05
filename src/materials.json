@@ -34,7 +34,7 @@
     },
     {
         "name": "autoignition_temperature",
-        "type": "uint",
+        "type": "int",
         "default": "100"
     },
     {
@@ -81,7 +81,7 @@
     },
     {
         "name": "cold_freezes_chance_rev",
-        "type": "uint",
+        "type": "int16",
         "default": "100"
     },
     {
@@ -101,7 +101,7 @@
     },
     {
         "name": "crackability",
-        "type": "uint",
+        "type": "int",
         "default": "0"
     },
     {
@@ -131,7 +131,7 @@
     },
     {
         "name": "durability",
-        "type": "uint",
+        "type": "int",
         "default": "0",
         "doc": "[0-14]"
     },
@@ -143,42 +143,42 @@
     },
     {
         "name": "fire_hp",
-        "type": "uint",
+        "type": "int",
         "default": "0"
     },
     {
         "name": "gas_downwards_speed",
-        "type": "uint",
+        "type": "uint8",
         "default": "90"
     },
     {
         "name": "gas_horizontal_speed",
-        "type": "uint",
+        "type": "uint8",
         "default": "100"
     },
     {
         "name": "gas_speed",
-        "type": "uint",
+        "type": "uint8",
         "default": "50"
     },
     {
         "name": "gas_upwards_speed",
-        "type": "uint",
+        "type": "uint8",
         "default": "100"
     },
     {
         "name": "generates_flames",
-        "type": "uint",
+        "type": "int",
         "default": "30"
     },
     {
         "name": "generates_smoke",
-        "type": "uint",
+        "type": "int",
         "default": "0"
     },
     {
         "name": "gfx_glow",
-        "type": "uint",
+        "type": "int",
         "default": "0"
     },
     {
@@ -188,7 +188,7 @@
     },
     {
         "name": "hp",
-        "type": "uint",
+        "type": "int",
         "default": "100"
     },
     {
@@ -203,7 +203,7 @@
     },
     {
         "name": "lifetime",
-        "type": "float",
+        "type": "int",
         "default": "0"
     },
     {
@@ -238,7 +238,7 @@
     },
     {
         "name": "liquid_sprite_stain_ignited_drop_chance",
-        "type": "uint",
+        "type": "float",
         "default": "10"
     },
     {
@@ -248,7 +248,7 @@
     },
     {
         "name": "liquid_sprite_stains_check_offset",
-        "type": "int",
+        "type": "int8",
         "default": "0"
     },
     {
@@ -278,12 +278,12 @@
     },
     {
         "name": "liquid_sticks_to_ceiling",
-        "type": "uint",
+        "type": "int",
         "default": "0"
     },
     {
         "name": "liquid_viscosity",
-        "type": "float",
+        "type": "int",
         "default": "50"
     },
     {
@@ -373,7 +373,7 @@
     },
     {
         "name": "solid_on_collision_splash_power",
-        "type": "bool",
+        "type": "float",
         "default": "1"
     },
     {
@@ -408,7 +408,7 @@
     },
     {
         "name": "temperature_of_fire",
-        "type": "uint",
+        "type": "int",
         "default": "10"
     },
     {
@@ -419,7 +419,7 @@
     },
     {
         "name": "vegetation_full_lifetime_growth",
-        "type": "uint",
+        "type": "int",
         "default": "10000"
     },
     {
@@ -449,7 +449,7 @@
     },
     {
         "name": "warmth_melts_chance_rev",
-        "type": "uint",
+        "type": "int16",
         "default": "100"
     },
     {

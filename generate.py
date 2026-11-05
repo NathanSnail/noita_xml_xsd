@@ -20,6 +20,7 @@ class Field:
     default: str
     values: str
     comment: str
+    sub_defaults: dict[str, str] | None = None
 
 
 @dataclass
@@ -57,6 +58,9 @@ def get_xml_type(name: str, ty: str) -> list[tuple[str, str]] | str:
         return get_xml_type(name, ty[len(lens) + 1 : -1])
     if ty == "float" or ty == "double":
         return [("", "xsd:decimal")]
+    small_ints = {"int8": "xsd:byte", "uint8": "xsd:unsignedByte", "int16": "xsd:short", "uint16": "xsd:unsignedShort"}
+    if ty in small_ints:
+        return [("", small_ints[ty])]
     if ty[:3] == "int":
         return [("", "xsd:int")]
     if ty[: len(unsigned)] == unsigned or ty[:4] == "uint":
@@ -65,7 +69,7 @@ def get_xml_type(name: str, ty: str) -> list[tuple[str, str]] | str:
         return [("", "xsd:string")]
     if ty == "bool":
         return [("", "NoitaBool")]
-    if ty == "vec2":
+    if ty in ("vec2", "types_vector2"):
         return [
             (".x", "xsd:decimal"),
             (".y", "xsd:decimal"),
@@ -211,7 +215,7 @@ COMPONENTS_WITH_MATERIALS = {
 
 
 def get_type_for_sub_field(field_name: str, ty: str, component_name: str) -> str:
-    if component_name == "ParticleEmitterComponent":
+    if component_name in ("ParticleEmitterComponent", "CosmeticParticleConfig"):
         if field_name == "color":
             return "Hex8"
     elif component_name == "GenomeDataComponent":
@@ -225,7 +229,10 @@ def get_type_for_sub_field(field_name: str, ty: str, component_name: str) -> str
 
 def render_sub_field(field: Field, suffix: str, ty: str, component_name: str) -> str:
     true_type = get_type_for_sub_field(field.name, ty, component_name)
-    default = get_default_for_sub_field(field, true_type, component_name)
+    default = (
+        field.sub_defaults[suffix] if field.sub_defaults is not None
+        else get_default_for_sub_field(field, true_type, component_name)
+    )
     return f"""
 \t\t<xsd:attribute name="{field.name}{suffix}" type="{true_type}" default="{default}">
 \t\t\t<xsd:annotation>
@@ -325,7 +332,8 @@ for config in configs_json:
             config["name"].split("::")[-1],
             [
                 Field(
-                    field["name"], field["type"], "-", "", field.get("description", "")
+                    field["name"], field["type"], field.get("default", "-"), "",
+                    field.get("description", ""), field.get("sub_defaults")
                 )
                 for field in config.get("members", [])
                 + config.get("privates", [])
@@ -626,12 +634,16 @@ reaction_attributes_json = render_json("reaction", "Reaction")
 config_explosion = next(
     render_config(config) for config in configs if config.name == "ConfigExplosion"
 )
+config_cosmetic_particle = next(
+    render_config(config) for config in configs if config.name == "CosmeticParticleConfig"
+)
 config_damage_critical = next(
     render_config(config) for config in configs if config.name == "ConfigDamageCritical"
 )
 configs_and_enums = f"""
 {config_damage_critical}
 {config_explosion}
+{config_cosmetic_particle}
 {"\n".join(render_enum(enum) for enum in enums)}
 """
 

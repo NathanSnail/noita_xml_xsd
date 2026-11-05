@@ -297,32 +297,32 @@
 				<xsd:documentation><![CDATA[```cpp<br>float entity_gravity_y_multiplier = 1.0; //  affects the VelocityComponents gravity_y<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
-		<xsd:attribute name="fog_of_war_delta" type="xsd:int" default="0">
+		<xsd:attribute name="fog_of_war_delta" type="xsd:byte" default="0">
 			<xsd:annotation>
 				<xsd:documentation><![CDATA[```cpp<br>int8 fog_of_war_delta = 0; //  fog of war change per frame (range -10..10)<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
-		<xsd:attribute name="fire_extinguish_chance" type="xsd:unsignedInt" default="0">
+		<xsd:attribute name="fire_extinguish_chance" type="xsd:unsignedByte" default="0">
 			<xsd:annotation>
 				<xsd:documentation><![CDATA[```cpp<br>uint8 fire_extinguish_chance = 0; //  probability of fire being extinguished per cell update (range 0..100)<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
-		<xsd:attribute name="reaction_freeze_chance" type="xsd:unsignedInt" default="0">
+		<xsd:attribute name="reaction_freeze_chance" type="xsd:unsignedByte" default="0">
 			<xsd:annotation>
 				<xsd:documentation><![CDATA[```cpp<br>uint8 reaction_freeze_chance = 0; //  probability of spontaneous freezing reactions per cell reaction update (range 0..100)<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
-		<xsd:attribute name="reaction_unfreeze_chance" type="xsd:unsignedInt" default="0">
+		<xsd:attribute name="reaction_unfreeze_chance" type="xsd:unsignedByte" default="0">
 			<xsd:annotation>
 				<xsd:documentation><![CDATA[```cpp<br>uint8 reaction_unfreeze_chance = 0; //  probability of spontaneous frozen material melting reactions per cell reaction update (range 0..100)<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
-		<xsd:attribute name="random_water_stains_chance" type="xsd:unsignedInt" default="0">
+		<xsd:attribute name="random_water_stains_chance" type="xsd:unsignedByte" default="0">
 			<xsd:annotation>
 				<xsd:documentation><![CDATA[```cpp<br>uint8 random_water_stains_chance = 0; //  probability of random water stains being added to characters (range 0..100)<br>```]]></xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
-		<xsd:attribute name="random_water_stains_amount" type="xsd:unsignedInt" default="0">
+		<xsd:attribute name="random_water_stains_amount" type="xsd:unsignedByte" default="0">
 			<xsd:annotation>
 				<xsd:documentation><![CDATA[```cpp<br>uint8 random_water_stains_amount = 0; //  number of water cells added when adding random water stains (range 0..100)<br>```]]></xsd:documentation>
 			</xsd:annotation>
