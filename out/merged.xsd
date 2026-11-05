@@ -16629,6 +16629,92 @@
 			<xsd:selector xpath="CellData | CellDataChild" />
 			<xsd:field xpath="@wang_color" />
 		</xsd:unique>
+	</xsd:element>	<!--Sprite, might need some
+	description on hover later, also some defaults are unknown-->
+	
+
+	<xsd:element name="Sprite">
+		<xsd:complexType mixed="true">
+			<xsd:choice maxOccurs="unbounded" minOccurs="0">
+				<xsd:element name="RectAnimation" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType mixed="true">
+						<xsd:choice>
+							<xsd:element name="Event" minOccurs="0"
+								maxOccurs="unbounded">
+								<xsd:complexType mixed="true">
+									<xsd:attribute name="name" type="xsd:string"
+										use="required" />
+									<xsd:attribute name="frame"
+										type="xsd:nonNegativeInteger"
+										use="required" />
+									<xsd:attribute name="max_distance"
+										type="xsd:positiveInteger" />
+									<xsd:attribute name="probability"
+										type="xsd:decimal" />
+									<xsd:attribute name="on_finished"
+										type="NoitaBool" />
+									<xsd:attribute name="check_physics_material"
+										type="NoitaBool" />
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:attribute name="name" type="xsd:string" use="required" />
+						<xsd:attribute name="frame_count" type="xsd:positiveInteger"
+							use="required" />
+						<xsd:attribute name="frames_per_row" type="xsd:positiveInteger"
+							use="required" />
+						<xsd:attribute name="frame_width" type="xsd:positiveInteger"
+							use="required" />
+						<xsd:attribute name="frame_height" type="xsd:positiveInteger"
+							use="required" />
+						<xsd:attribute name="frame_wait" type="xsd:decimal" use="required" />
+						<xsd:attribute name="pos_x" type="xsd:integer" default="0" />
+						<xsd:attribute name="pos_y" type="xsd:integer" default="0" />
+						<xsd:attribute name="offset_x" type="xsd:decimal" default="0" />
+						<xsd:attribute name="offset_y" type="xsd:decimal" default="0" />
+						<xsd:attribute name="shrink_by_one_pixel" type="NoitaBool" />
+						<xsd:attribute name="has_offset" type="NoitaBool" default="1" />
+						<xsd:attribute name="loop" type="NoitaBool" default="0" />
+						<xsd:attribute name="next_animation" type="xsd:string" default="" />
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="Hotspot" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType mixed="true">
+						<xsd:attribute name="name" type="xsd:string" use="required" />
+						<xsd:attribute name="color" type="xsd:hexBinary" use="required" />
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:attribute name="filename" type="xsd:string" use="required" />
+			<xsd:attribute name="hotspots_filename" type="xsd:string" />
+			<xsd:attribute name="offset_x" type="xsd:decimal" default="0" />
+			<xsd:attribute name="offset_y" type="xsd:decimal" default="0" />
+			<xsd:attribute name="position_x" type="xsd:decimal" default="0" />
+			<xsd:attribute name="position_y" type="xsd:decimal" default="0" />
+			<xsd:attribute name="default_animation" type="xsd:string" default="default" />
+			<xsd:attribute name="color_a" type="xsd:decimal" default="1" />
+			<xsd:attribute name="color_b" type="xsd:decimal" default="1" />
+			<xsd:attribute name="color_g" type="xsd:decimal" default="1" />
+			<xsd:attribute name="color_r" type="xsd:decimal" default="1" />
+		</xsd:complexType>
+		<xsd:unique name="UniqueRectAnimationName">
+			<xsd:selector xpath="RectAnimation" />
+			<xsd:field xpath="@name" />
+		</xsd:unique>
+	</xsd:element>	
+
+	<xsd:complexType name="BiomeAllBiome" mixed="true">
+		<xsd:attribute name="color" type="Hex8" use="required"></xsd:attribute>
+		<xsd:attribute name="biome_filename" type="xsd:string" use="required"></xsd:attribute>
+	</xsd:complexType>
+	<xsd:element name="BiomesToLoad">
+		<xsd:complexType mixed="true">
+			<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="Biome" type="BiomeAllBiome"></xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name="biome_image_map" type="xsd:string"></xsd:attribute>
+			<xsd:attribute name="biome_offset_y" type="xsd:int"></xsd:attribute>
+		</xsd:complexType>
 	</xsd:element>	
 
 	<xsd:element name="Mod">

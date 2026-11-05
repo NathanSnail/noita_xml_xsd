@@ -652,7 +652,7 @@ def handwritten(name: str):
     global out
     with open(f"./src/{name}.xsd", "r") as src_file:
         content = src_file.read()
-        out += prune_builtin(src_file.read())
+        out += prune_builtin(content)
         open(f"./out/{name}.xsd", "w").write(content)
 
 
