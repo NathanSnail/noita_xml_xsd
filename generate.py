@@ -665,6 +665,21 @@ apply_replacements(
     {"Mod Attributes": mod_replacements.attributes, "Mod Docs": mod_replacements.docs},
 )
 
+font_replacements = render_json("font", "CFont")
+quadchar_replacements = render_json("font_quadchar", "QuadChar")
+char_replacements = render_json("font_char", "Char")
+apply_replacements(
+    "font",
+    {
+        "FontData Attributes": font_replacements.attributes,
+        "FontData Docs": font_replacements.docs,
+        "QuadChar Attributes": quadchar_replacements.attributes,
+        "QuadChar Docs": quadchar_replacements.docs,
+        "Char Attributes": char_replacements.attributes,
+        "Char Docs": char_replacements.docs,
+    },
+)
+
 magic_replacements = render_json("magic_numbers", "MagicNumbers")
 apply_replacements(
     "magic_numbers",

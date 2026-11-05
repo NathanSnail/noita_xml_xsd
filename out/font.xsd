@@ -1,0 +1,138 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<!--Builtin-->
+	<xsd:simpleType name="NoitaBool">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="0" />
+			<xsd:enumeration value="1" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!--Builtin-->
+	<xsd:complexType name="FontDataType" mixed="true">
+		<!-- FontData Docs --><xsd:annotation><xsd:documentation><![CDATA[<br>```cpp<br>class CFont {<br>&emsp;&emsp;&emsp;&emsp;float color_r = 0; //  Red component of the font colour, copied to the text renderer when the font is loaded<br>&emsp;&emsp;&emsp;&emsp;float color_g = 0; //  Green component of the font colour<br>&emsp;&emsp;&emsp;&emsp;float color_b = 0; //  Blue component of the font colour<br>&emsp;&emsp;&emsp;&emsp;float color_a = 1; //  Alpha component of the font colour, clamped to 0..1<br>};<br>```<br>]]></xsd:documentation></xsd:annotation><!-- FontData Docs -->
+		<xsd:choice minOccurs="0" maxOccurs="unbounded">
+			<xsd:element name="Texture" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Path to the glyph atlas image, e.g. `data/fonts/font_pixel.png`. Surrounding whitespace is ignored.]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LineHeight" type="xsd:decimal">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Height of one line of text in pixels. 0 if missing.]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CharSpace" type="xsd:decimal">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Extra space added after every character, in pixels; may be negative. 0 if missing.]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="WordSpace" type="xsd:decimal">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Width of a space character in pixels. 0 if missing.]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="QuadChar">
+				<xsd:complexType mixed="true">
+					<!-- QuadChar Docs --><xsd:annotation><xsd:documentation><![CDATA[<br>```cpp<br>class QuadChar {<br>&emsp;&emsp;&emsp;&emsp;int id = 0; //  Unicode code point of the character. A later QuadChar or Char with the same id replaces this one<br>&emsp;&emsp;&emsp;&emsp;float rect_x = 0; //  Left edge of the glyph in the Texture, in pixels<br>&emsp;&emsp;&emsp;&emsp;float rect_y = 0; //  Top edge of the glyph in the Texture, in pixels<br>&emsp;&emsp;&emsp;&emsp;float rect_w = 0; //  Width of the glyph in the Texture, in pixels<br>&emsp;&emsp;&emsp;&emsp;float rect_h = 0; //  Height of the glyph in the Texture, in pixels<br>&emsp;&emsp;&emsp;&emsp;float offset_x = 0; //  Horizontal draw offset of the glyph<br>&emsp;&emsp;&emsp;&emsp;float offset_y = 0; //  Vertical draw offset of the glyph. The font keeps the largest -offset_y across all glyphs<br>&emsp;&emsp;&emsp;&emsp;float width = 0; //  Horizontal advance after the glyph, before CharSpace is added<br>};<br>```<br>]]></xsd:documentation></xsd:annotation><!-- QuadChar Docs -->
+					<!-- QuadChar Attributes -->
+		<xsd:attribute name="id" type="xsd:int" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int id = 0; //  Unicode code point of the character. A later QuadChar or Char with the same id replaces this one<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rect_x" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float rect_x = 0; //  Left edge of the glyph in the Texture, in pixels<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rect_y" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float rect_y = 0; //  Top edge of the glyph in the Texture, in pixels<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rect_w" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float rect_w = 0; //  Width of the glyph in the Texture, in pixels<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rect_h" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float rect_h = 0; //  Height of the glyph in the Texture, in pixels<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="offset_x" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float offset_x = 0; //  Horizontal draw offset of the glyph<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="offset_y" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float offset_y = 0; //  Vertical draw offset of the glyph. The font keeps the largest -offset_y across all glyphs<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="width" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float width = 0; //  Horizontal advance after the glyph, before CharSpace is added<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+<!-- QuadChar Attributes -->
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="Char">
+				<xsd:complexType mixed="true">
+					<!-- Char Docs --><xsd:annotation><xsd:documentation><![CDATA[<br>```cpp<br>class Char {<br>&emsp;&emsp;&emsp;&emsp;int id = 0; //  Unicode code point of the character. A later QuadChar or Char with the same id replaces this one<br>&emsp;&emsp;&emsp;&emsp;float rect_x = 0; //  Left edge of the glyph in the Texture, in pixels<br>&emsp;&emsp;&emsp;&emsp;float rect_y = 0; //  Top edge of the glyph in the Texture, in pixels<br>&emsp;&emsp;&emsp;&emsp;float rect_w = 0; //  Width of the glyph in the Texture, in pixels. Also used as the advance (width) for a new glyph<br>&emsp;&emsp;&emsp;&emsp;float rect_h = 0; //  Height of the glyph in the Texture, in pixels<br>};<br>```<br>]]></xsd:documentation></xsd:annotation><!-- Char Docs -->
+					<!-- Char Attributes -->
+		<xsd:attribute name="id" type="xsd:int" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>int id = 0; //  Unicode code point of the character. A later QuadChar or Char with the same id replaces this one<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rect_x" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float rect_x = 0; //  Left edge of the glyph in the Texture, in pixels<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rect_y" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float rect_y = 0; //  Top edge of the glyph in the Texture, in pixels<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rect_w" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float rect_w = 0; //  Width of the glyph in the Texture, in pixels. Also used as the advance (width) for a new glyph<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="rect_h" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float rect_h = 0; //  Height of the glyph in the Texture, in pixels<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+<!-- Char Attributes -->
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+		<!-- FontData Attributes -->
+		<xsd:attribute name="color_r" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float color_r = 0; //  Red component of the font colour, copied to the text renderer when the font is loaded<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="color_g" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float color_g = 0; //  Green component of the font colour<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="color_b" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float color_b = 0; //  Blue component of the font colour<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="color_a" type="xsd:decimal" default="1">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float color_a = 1; //  Alpha component of the font colour, clamped to 0..1<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+<!-- FontData Attributes -->
+	</xsd:complexType>
+	<xsd:element name="FontData" type="FontDataType" />
+	<xsd:element name="Font" type="FontDataType" />
+</xsd:schema>

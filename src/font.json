@@ -1,0 +1,26 @@
+[
+	{
+		"name": "color_r",
+		"type": "float",
+		"default": "0",
+		"doc": "Red component of the font colour, copied to the text renderer when the font is loaded"
+	},
+	{
+		"name": "color_g",
+		"type": "float",
+		"default": "0",
+		"doc": "Green component of the font colour"
+	},
+	{
+		"name": "color_b",
+		"type": "float",
+		"default": "0",
+		"doc": "Blue component of the font colour"
+	},
+	{
+		"name": "color_a",
+		"type": "float",
+		"default": "1",
+		"doc": "Alpha component of the font colour, clamped to 0..1"
+	}
+]

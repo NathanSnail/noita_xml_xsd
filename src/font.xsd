@@ -1,0 +1,56 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<!--Builtin-->
+	<xsd:simpleType name="NoitaBool">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="0" />
+			<xsd:enumeration value="1" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!--Builtin-->
+	<xsd:complexType name="FontDataType" mixed="true">
+		<!-- FontData Docs -->
+		<!-- FontData Docs -->
+		<xsd:choice minOccurs="0" maxOccurs="unbounded">
+			<xsd:element name="Texture" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Path to the glyph atlas image, e.g. `data/fonts/font_pixel.png`. Surrounding whitespace is ignored.]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LineHeight" type="xsd:decimal">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Height of one line of text in pixels. 0 if missing.]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CharSpace" type="xsd:decimal">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Extra space added after every character, in pixels; may be negative. 0 if missing.]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="WordSpace" type="xsd:decimal">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Width of a space character in pixels. 0 if missing.]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="QuadChar">
+				<xsd:complexType mixed="true">
+					<!-- QuadChar Docs -->
+					<!-- QuadChar Docs -->
+					<!-- QuadChar Attributes -->
+					<!-- QuadChar Attributes -->
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="Char">
+				<xsd:complexType mixed="true">
+					<!-- Char Docs -->
+					<!-- Char Docs -->
+					<!-- Char Attributes -->
+					<!-- Char Attributes -->
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+		<!-- FontData Attributes -->
+		<!-- FontData Attributes -->
+	</xsd:complexType>
+	<xsd:element name="FontData" type="FontDataType" />
+	<xsd:element name="Font" type="FontDataType" />
+</xsd:schema>
