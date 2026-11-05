@@ -20,6 +20,7 @@ class Field:
     default: str
     values: str
     comment: str
+    sub_defaults: dict[str, str] | None = None
 
 
 @dataclass
@@ -57,6 +58,9 @@ def get_xml_type(name: str, ty: str) -> list[tuple[str, str]] | str:
         return get_xml_type(name, ty[len(lens) + 1 : -1])
     if ty == "float" or ty == "double":
         return [("", "xsd:decimal")]
+    small_ints = {"int8": "xsd:byte", "uint8": "xsd:unsignedByte", "int16": "xsd:short", "uint16": "xsd:unsignedShort"}
+    if ty in small_ints:
+        return [("", small_ints[ty])]
     if ty[:3] == "int":
         return [("", "xsd:int")]
     if ty[: len(unsigned)] == unsigned or ty[:4] == "uint":
@@ -65,7 +69,7 @@ def get_xml_type(name: str, ty: str) -> list[tuple[str, str]] | str:
         return [("", "xsd:string")]
     if ty == "bool":
         return [("", "NoitaBool")]
-    if ty == "vec2":
+    if ty in ("vec2", "types_vector2"):
         return [
             (".x", "xsd:decimal"),
             (".y", "xsd:decimal"),
@@ -211,7 +215,7 @@ COMPONENTS_WITH_MATERIALS = {
 
 
 def get_type_for_sub_field(field_name: str, ty: str, component_name: str) -> str:
-    if component_name == "ParticleEmitterComponent":
+    if component_name in ("ParticleEmitterComponent", "CosmeticParticleConfig"):
         if field_name == "color":
             return "Hex8"
     elif component_name == "GenomeDataComponent":
@@ -225,7 +229,10 @@ def get_type_for_sub_field(field_name: str, ty: str, component_name: str) -> str
 
 def render_sub_field(field: Field, suffix: str, ty: str, component_name: str) -> str:
     true_type = get_type_for_sub_field(field.name, ty, component_name)
-    default = get_default_for_sub_field(field, true_type, component_name)
+    default = (
+        field.sub_defaults[suffix] if field.sub_defaults is not None
+        else get_default_for_sub_field(field, true_type, component_name)
+    )
     return f"""
 \t\t<xsd:attribute name="{field.name}{suffix}" type="{true_type}" default="{default}">
 \t\t\t<xsd:annotation>
@@ -325,7 +332,8 @@ for config in configs_json:
             config["name"].split("::")[-1],
             [
                 Field(
-                    field["name"], field["type"], "-", "", field.get("description", "")
+                    field["name"], field["type"], field.get("default", "-"), "",
+                    field.get("description", ""), field.get("sub_defaults")
                 )
                 for field in config.get("members", [])
                 + config.get("privates", [])
@@ -626,12 +634,16 @@ reaction_attributes_json = render_json("reaction", "Reaction")
 config_explosion = next(
     render_config(config) for config in configs if config.name == "ConfigExplosion"
 )
+config_cosmetic_particle = next(
+    render_config(config) for config in configs if config.name == "CosmeticParticleConfig"
+)
 config_damage_critical = next(
     render_config(config) for config in configs if config.name == "ConfigDamageCritical"
 )
 configs_and_enums = f"""
 {config_damage_critical}
 {config_explosion}
+{config_cosmetic_particle}
 {"\n".join(render_enum(enum) for enum in enums)}
 """
 
@@ -652,7 +664,7 @@ def handwritten(name: str):
     global out
     with open(f"./src/{name}.xsd", "r") as src_file:
         content = src_file.read()
-        out += prune_builtin(src_file.read())
+        out += prune_builtin(content)
         open(f"./out/{name}.xsd", "w").write(content)
 
 
@@ -663,6 +675,65 @@ mod_replacements = render_json("mod", "Mod")
 apply_replacements(
     "mod",
     {"Mod Attributes": mod_replacements.attributes, "Mod Docs": mod_replacements.docs},
+)
+
+font_replacements = render_json("font", "CFont")
+quadchar_replacements = render_json("font_quadchar", "QuadChar")
+char_replacements = render_json("font_char", "Char")
+apply_replacements(
+    "font",
+    {
+        "FontData Attributes": font_replacements.attributes,
+        "FontData Docs": font_replacements.docs,
+        "QuadChar Attributes": quadchar_replacements.attributes,
+        "QuadChar Docs": quadchar_replacements.docs,
+        "Char Attributes": char_replacements.attributes,
+        "Char Docs": char_replacements.docs,
+    },
+)
+
+biome_parts = {
+    "Topology": render_json("biome_topology", "Biome"),
+    "BitmapCaves": render_json("biome_caves", "CavesSetup"),
+    "CaveStructure": render_json("biome_cavestructure", "CaveStructure"),
+    "BiomeModifiers": render_json("biome_modifiers", "BiomeModifiers"),
+    "RandomColor": render_json("biome_randomcolor", "RandomColor"),
+    "MaterialComponent": render_json("biome_material", "MaterialComponent"),
+    "VegetationComponent": render_json("biome_vegetation", "VegetationComponent"),
+    "FossilComponent": render_json("biome_fossil", "FossilComponent"),
+}
+apply_replacements(
+    "biome",
+    {
+        f"{name} {kind}": getattr(part, kind.lower())
+        for name, part in biome_parts.items()
+        for kind in ("Attributes", "Docs")
+    },
+)
+
+pixel_scene_parts = {
+    "PixelScene": render_json("pixel_scene", "PixelScene"),
+    "Image": render_json("pixel_scene_image", "BackgroundImage"),
+}
+apply_replacements(
+    "pixel_scenes",
+    {
+        f"{name} {kind}": getattr(part, kind.lower())
+        for name, part in pixel_scene_parts.items()
+        for kind in ("Attributes", "Docs")
+    },
+)
+
+language_replacements = render_json("language", "Language")
+apply_replacements(
+    "language",
+    {"Language Attributes": language_replacements.attributes, "Language Docs": language_replacements.docs},
+)
+
+weather_replacements = render_json("weather_config", "ConfigParallaxBackground")
+apply_replacements(
+    "weather_config",
+    {"WeatherConfig Attributes": weather_replacements.attributes, "WeatherConfig Docs": weather_replacements.docs},
 )
 
 magic_replacements = render_json("magic_numbers", "MagicNumbers")

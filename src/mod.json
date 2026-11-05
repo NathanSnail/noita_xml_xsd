@@ -2,73 +2,103 @@
 	{
 		"name": "name",
 		"type": "std::string",
-		"required": true,
-		"doc": "The name of the mod in game"
+		"default": "",
+		"doc": "mod.xml: name in the mod list. workshop.xml: Workshop item title. Not required by the game, empty if missing"
 	},
 	{
 		"name": "description",
 		"type": "std::string",
-		"required": true,
-		"doc": "The description of the mod in game"
+		"default": "",
+		"doc": "mod.xml: description in the mod list. workshop.xml: Workshop description; an empty one leaves the Workshop page text unchanged"
 	},
 	{
 		"name": "request_no_api_restrictions",
 		"type": "bool",
 		"default": "0",
-		"doc": "If true then this mod requires unsafe mods to be enabled and has full access to luajit, note this means it can't be put on the workshop"
+		"doc": "mod.xml only. If 1 the mod's lua state opens the full LuaJIT library set (package/require, io, os, debug, ffi) and keeps load/loadstring/collectgarbage. The player must allow unsafe mods, and such mods don't work through the Steam Workshop"
 	},
 	{
 		"name": "ui_newgame_name",
 		"type": "std::string",
 		"default": "",
-		"doc": "If this is a gamemode mod then this is the name of that gamemode"
+		"doc": "mod.xml only. Game mode name shown in the new game menu. Only used with is_game_mode=\"1\". Accepts $translation keys"
 	},
 	{
 		"name": "ui_newgame_description",
 		"type": "std::string",
 		"default": "",
-		"doc": "If this is a gamemode mod then this is the description of that gamemode"
+		"doc": "mod.xml only. Game mode description shown in the new game menu. Only used with is_game_mode=\"1\". Accepts $translation keys"
 	},
 	{
 		"name": "ui_newgame_gfx_banner_bg",
 		"type": "std::string",
-		"default": "0.5",
-		"doc": "If this is a gamemode then this is the path to the background of the banner"
+		"default": "",
+		"doc": "mod.xml only. Path to the background image of the game mode's new game menu banner, e.g. mods/<id>/files/menu_banner_background.png"
 	},
 	{
 		"name": "ui_newgame_gfx_banner_fg",
 		"type": "std::string",
-		"default": "0.5",
-		"doc": "If this is a gamemode then this is the path to the foreground of the banner"
+		"default": "",
+		"doc": "mod.xml only. Path to the overlay image of the game mode's new game menu banner, e.g. mods/<id>/files/menu_banner_overlay.png"
 	},
 	{
 		"name": "is_game_mode",
 		"type": "bool",
 		"default": "0",
-		"doc": "If true then this mod can't be enabled and is started from the newgame menu"
+		"doc": "mod.xml only. If 1 this mod is a game mode: it isn't enabled from the mod list but started from the new game menu, using the ui_newgame_* attributes"
 	},
 	{
 		"name": "game_mode_supports_save_slots",
 		"type": "bool",
 		"default": "0",
-		"doc": "If true then this mod can't be enabled and is started from the newgame menu"
+		"doc": "mod.xml only. If 1 a game mode (is_game_mode=\"1\") supports multiple save slots"
 	},
 	{
 		"name": "is_translation",
 		"type": "bool",
 		"default": "0",
-		"doc": "If true then this mod can't change the game and instead uses `translation_xml_path` and `translation_csv_path` to specify its content"
+		"doc": "mod.xml only. If 1 normal mod functionality is turned off and the mod is listed under Language in the options menu instead, using translation_xml_path and translation_csv_path"
 	},
 	{
 		"name": "translation_xml_path",
 		"type": "std::string",
 		"default": "",
-		"doc": "Path to the translations csv for this modded language"
+		"doc": "mod.xml only. Path to the <Language> xml of a translation mod (language key, name, fonts, UI offsets), e.g. mods/<id>/translation.xml"
 	},
 	{
 		"name": "translation_csv_path",
 		"type": "std::string",
 		"default": "",
-		"doc": "Path to the font xml for this modded language"
+		"doc": "mod.xml only. Path to the translation csv of a translation mod, e.g. mods/<id>/translation.csv"
+	},
+	{
+		"name": "tags",
+		"type": "std::string",
+		"default": "",
+		"doc": "workshop.xml only (ignored in mod.xml). Comma-separated Steam Workshop tags, spelled exactly as listed in tools_modding/READ_ME_FIRST.txt"
+	},
+	{
+		"name": "dont_upload_folders",
+		"type": "std::string",
+		"default": "",
+		"doc": "workshop.xml only (ignored in mod.xml). Folders not to upload, separated with |, e.g. ignore_this|files\\ignore_this_subfolder"
+	},
+	{
+		"name": "dont_upload_files",
+		"type": "std::string",
+		"default": "",
+		"doc": "workshop.xml only (ignored in mod.xml). Files not to upload, separated with |, e.g. README.md|.gitignore"
+	},
+	{
+		"name": "_format_version",
+		"type": "int",
+		"default": "0",
+		"doc": "compatibility.xml only. Format version of this file"
+	},
+	{
+		"name": "version_built_with",
+		"type": "int",
+		"default": "0",
+		"doc": "compatibility.xml only. Game build number recorded for the mod"
 	}
 ]

@@ -1,0 +1,20 @@
+[
+	{
+		"name": "filename",
+		"type": "std::string",
+		"default": "",
+		"doc": "Background image to place"
+	},
+	{
+		"name": "x",
+		"type": "int",
+		"default": "0",
+		"doc": "Absolute world x, in pixels"
+	},
+	{
+		"name": "y",
+		"type": "int",
+		"default": "0",
+		"doc": "Absolute world y, in pixels"
+	}
+]

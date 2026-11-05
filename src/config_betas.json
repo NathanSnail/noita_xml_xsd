@@ -1095,6 +1095,12 @@
                 "type": "int",
                 "name": "explosion_delay_id",
                 "description": "for delayed barrel explosions... this has to be set and has to be the same for the explosions for there to be a delay"
+            },
+            {
+                "type": "bool",
+                "name": "not_scaled_by_gamefx",
+                "default": "0",
+                "description": "If 1, DAMAGE_MULTIPLIER etc do not affect this explosion"
             }
         ],
         "privates": [
@@ -2259,74 +2265,97 @@
         "members": [
             {
                 "type": "int",
-                "name": "m_material_id"
+                "name": "m_material_id",
+                "default": "1"
             },
             {
                 "type": "bool",
-                "name": "cosmetic_force_create"
+                "name": "cosmetic_force_create",
+                "default": "0"
             },
             {
                 "type": "bool",
-                "name": "render_back"
+                "name": "render_back",
+                "default": "0"
             },
             {
                 "type": "bool",
-                "name": "render_on_grid"
+                "name": "render_on_grid",
+                "default": "0"
             },
             {
                 "type": "bool",
-                "name": "draw_as_long"
+                "name": "draw_as_long",
+                "default": "0"
             },
             {
                 "type": "float",
-                "name": "airflow_force"
+                "name": "airflow_force",
+                "default": "0"
             },
             {
                 "type": "float",
-                "name": "airflow_scale"
+                "name": "airflow_scale",
+                "default": "0"
             },
             {
                 "type": "float",
-                "name": "friction"
+                "name": "friction",
+                "default": "0"
             },
             {
                 "type": "float",
-                "name": "probability"
+                "name": "probability",
+                "default": "1"
             },
             {
                 "type": "bool",
-                "name": "particle_single_width"
+                "name": "particle_single_width",
+                "default": "1"
             },
             {
                 "type": "bool",
-                "name": "fade_based_on_lifetime"
+                "name": "fade_based_on_lifetime",
+                "default": "1"
             }
         ],
         "custom_data_types": [
             {
                 "type": "types_vector2",
-                "name": "vel"
+                "name": "vel",
+                "default": "0"
             },
             {
                 "type": "types::aabb",
-                "name": "vel_random"
+                "name": "vel_random",
+                "default": "0"
             },
             {
                 "type": "uint32",
                 "name": "color",
-                "description": "if something else than 0 will use this color"
+                "description": "if something else than 0 will use this color",
+                "default": "0"
             },
             {
                 "type": "ValueRange",
-                "name": "lifetime"
+                "name": "lifetime",
+                "sub_defaults": {
+                    ".min": "0.5",
+                    ".max": "1"
+                }
             },
             {
                 "type": "types_vector2",
-                "name": "gravity"
+                "name": "gravity",
+                "sub_defaults": {
+                    ".x": "0",
+                    ".y": "100"
+                }
             },
             {
                 "type": "ValueRangeInt",
-                "name": "count"
+                "name": "count",
+                "default": "1"
             }
         ]
     },

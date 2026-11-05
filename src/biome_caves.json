@@ -1,0 +1,164 @@
+[
+	{
+		"name": "name",
+		"type": "std::string",
+		"default": "",
+		"doc": "we share these based on the names, so make them unique"
+	},
+	{
+		"name": "size_x",
+		"type": "int",
+		"default": "512",
+		"doc": "How big the image is that we generate these from"
+	},
+	{
+		"name": "size_y",
+		"type": "int",
+		"default": "256",
+		"doc": "How big the image is that we generate these from"
+	},
+	{
+		"name": "spawn_percent",
+		"type": "float",
+		"default": "0.05",
+		"doc": "0-1 - with what chance do we add a spawn point to a cave"
+	},
+	{
+		"name": "cave_count_min",
+		"type": "int",
+		"default": "50",
+		"doc": "generates caves n, where n = random(cave_count_min, cave_count_max) (range 0..200)"
+	},
+	{
+		"name": "cave_count_max",
+		"type": "int",
+		"default": "100",
+		"doc": "generates caves n, where n = random(cave_count_min, cave_count_max) (range 0..200)"
+	},
+	{
+		"name": "do_beginning_paths",
+		"type": "bool",
+		"default": "0",
+		"doc": "if set, will do the paths that go down near the center of the image, used for setting up the caves to coal mines near where player starts"
+	},
+	{
+		"name": "do_beginning_down",
+		"type": "bool",
+		"default": "0",
+		"doc": "if true, will do a hole straight down"
+	},
+	{
+		"name": "surface_caves_count_min",
+		"type": "int",
+		"default": "7",
+		"doc": "generates caves n from the surface, where n = random(surface_caves_count_min, surface_caves_count_max) (range 0..200)"
+	},
+	{
+		"name": "surface_caves_count_max",
+		"type": "int",
+		"default": "12",
+		"doc": "generates caves n from the surface, where n = random(surface_caves_count_min, surface_caves_count_max) (range 0..200)"
+	},
+	{
+		"name": "cave_strength_min",
+		"type": "float",
+		"default": "0.2",
+		"doc": "how strongly do we carve the cave"
+	},
+	{
+		"name": "cave_strength_max",
+		"type": "float",
+		"default": "1.0",
+		"doc": "how strongly do we carve the cave"
+	},
+	{
+		"name": "cave_childs_min",
+		"type": "int",
+		"default": "0",
+		"doc": "how many child trails a cave can have (range 0..10)"
+	},
+	{
+		"name": "cave_childs_max",
+		"type": "int",
+		"default": "2",
+		"doc": "how many child trails a cave can have (range 0..10)"
+	},
+	{
+		"name": "surface_cave_childs_min",
+		"type": "int",
+		"default": "2",
+		"doc": "how many child trails a cave can have (range 0..10)"
+	},
+	{
+		"name": "surface_cave_childs_max",
+		"type": "int",
+		"default": "7",
+		"doc": "how many child trails a cave can have (range 0..10)"
+	},
+	{
+		"name": "mountain_count_min",
+		"type": "int",
+		"default": "0",
+		"doc": "how many child trails a cave can have (range 0..10)"
+	},
+	{
+		"name": "mountain_count_max",
+		"type": "int",
+		"default": "15",
+		"doc": "how many child trails a cave can have (range 0..10)"
+	},
+	{
+		"name": "mountain_size_min",
+		"type": "float",
+		"default": "1.0",
+		"doc": ""
+	},
+	{
+		"name": "mountain_size_max",
+		"type": "float",
+		"default": "10.0",
+		"doc": ""
+	},
+	{
+		"name": "blob_caves_count_min",
+		"type": "int",
+		"default": "20",
+		"doc": " (range 0..50)"
+	},
+	{
+		"name": "blob_caves_count_max",
+		"type": "int",
+		"default": "55",
+		"doc": " (range 0..100)"
+	},
+	{
+		"name": "blob_caves_strength_min",
+		"type": "float",
+		"default": "1.5",
+		"doc": " (range 0..50)"
+	},
+	{
+		"name": "blob_caves_strength_max",
+		"type": "float",
+		"default": "3.0",
+		"doc": " (range 0..100)"
+	},
+	{
+		"name": "blob_caves_radius_min",
+		"type": "float",
+		"default": "1.0",
+		"doc": ""
+	},
+	{
+		"name": "blob_caves_radius_max",
+		"type": "float",
+		"default": "10.0",
+		"doc": ""
+	},
+	{
+		"name": "DEBUG_output_image",
+		"type": "std::string",
+		"default": "",
+		"doc": "if set, will save a png of the height map to the file specified here"
+	}
+]

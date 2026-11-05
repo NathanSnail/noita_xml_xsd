@@ -1,0 +1,470 @@
+[
+	{
+		"name": "name",
+		"type": "std::string",
+		"default": "",
+		"doc": "the name that is exposed to lua functions that spawn entities. Usually a $biome_ translation key"
+	},
+	{
+		"name": "type",
+		"type": "BIOME_TYPE::Enum",
+		"default": "BIOME_PROCEDURAL",
+		"doc": "Generator: BIOME_PROCEDURAL (cave noise), BIOME_BITMAP (bitmap_filename), BIOME_WANG_TILE (wang_template_file)"
+	},
+	{
+		"name": "background_image",
+		"type": "std::string",
+		"default": "",
+		"doc": "path to the image file (texture) that is used for the background"
+	},
+	{
+		"name": "background_edge_left",
+		"type": "std::string",
+		"default": "",
+		"doc": "if not empty, will use this image as the left edge"
+	},
+	{
+		"name": "background_edge_right",
+		"type": "std::string",
+		"default": "",
+		"doc": "if not empty, will use this image as the right edge"
+	},
+	{
+		"name": "background_edge_top",
+		"type": "std::string",
+		"default": "",
+		"doc": "if not empty, will use this image as the top edge"
+	},
+	{
+		"name": "background_edge_bottom",
+		"type": "std::string",
+		"default": "",
+		"doc": "if not empty, will use this image as the bottom edge"
+	},
+	{
+		"name": "background_edge_priority",
+		"type": "int",
+		"default": "0",
+		"doc": "if both biomes have edges defined, will use the one with higher priority (if priority is same, will compare (>) background_images)"
+	},
+	{
+		"name": "background_use_neighbor",
+		"type": "bool",
+		"default": "0",
+		"doc": "if set will look for neighboring biomes and use their background image"
+	},
+	{
+		"name": "background_image_height",
+		"type": "float",
+		"default": "225.0",
+		"doc": "height were the background image starts"
+	},
+	{
+		"name": "limit_background_image",
+		"type": "bool",
+		"default": "1",
+		"doc": "Will limit the background image to start at the cave height"
+	},
+	{
+		"name": "bitmap_noise_file",
+		"type": "std::string",
+		"default": "",
+		"doc": "if set, loads it to mBitmapNoise"
+	},
+	{
+		"name": "noise_biome_edges",
+		"type": "bool",
+		"default": "1",
+		"doc": "does the noisy edge for biomes, if either of biomes has this set to 0 will do a straight edge"
+	},
+	{
+		"name": "big_noise_biome_edges",
+		"type": "bool",
+		"default": "1",
+		"doc": "if true, will leak onto other biomes and not be carveable"
+	},
+	{
+		"name": "fat_biome_edges",
+		"type": "bool",
+		"default": "0",
+		"doc": "if true, will leak onto other biomes and not be carveable"
+	},
+	{
+		"name": "skip_edge_textures",
+		"type": "bool",
+		"default": "0",
+		"doc": "skips edge texture generation. Turn of for pixel scenes"
+	},
+	{
+		"name": "audio_music_enter",
+		"type": "std::string",
+		"default": "",
+		"doc": "the music event that plays when player enters this biome (e.g. 'music/desert/enter')"
+	},
+	{
+		"name": "audio_music_2",
+		"type": "std::string",
+		"default": "",
+		"doc": "the music directory that plays while player is in this biome (e.g 'coalmine')"
+	},
+	{
+		"name": "audio_music_energy_coeff",
+		"type": "float",
+		"default": "1.0",
+		"doc": "Multiplier for music energy in this biome"
+	},
+	{
+		"name": "audio_music_no_forced_quietness",
+		"type": "bool",
+		"default": "0",
+		"doc": "If 1, music is not quieted by occasional quietness"
+	},
+	{
+		"name": "audio_music_forced_quietness_duration_seconds",
+		"type": "int",
+		"default": "0",
+		"doc": "If > 0, this is the duration of occasional quietness, else the value from magic numbers is used."
+	},
+	{
+		"name": "audio_music_trigger_without_danger",
+		"type": "bool",
+		"default": "0",
+		"doc": "If 1, music is triggered in this biome no matter what the danger level is"
+	},
+	{
+		"name": "audio_music_trigger_min_y",
+		"type": "int",
+		"default": "0",
+		"doc": ""
+	},
+	{
+		"name": "audio_music_trigger_max_y",
+		"type": "int",
+		"default": "0",
+		"doc": ""
+	},
+	{
+		"name": "audio_biome_id_for_music",
+		"type": "std::string",
+		"default": "",
+		"doc": ""
+	},
+	{
+		"name": "audio_ambience",
+		"type": "std::string",
+		"default": "cave",
+		"doc": "the ambience event that plays while player is in this biome"
+	},
+	{
+		"name": "audio_ambience_surface",
+		"type": "std::string",
+		"default": "hills",
+		"doc": "the ambience event that plays while player is in this biome and on surface"
+	},
+	{
+		"name": "color_grading_r",
+		"type": "float",
+		"default": "1.0",
+		"doc": "post fx color grading"
+	},
+	{
+		"name": "color_grading_g",
+		"type": "float",
+		"default": "1.0",
+		"doc": "post fx color grading"
+	},
+	{
+		"name": "color_grading_b",
+		"type": "float",
+		"default": "1.0",
+		"doc": "post fx color grading"
+	},
+	{
+		"name": "color_grading_grayscale",
+		"type": "float",
+		"default": "0.0",
+		"doc": "post fx color grading. [0.0,1.0], larger value means more grayscale"
+	},
+	{
+		"name": "has_rain",
+		"type": "bool",
+		"default": "1",
+		"doc": "if 1, rain or snowfall may occur in this biome"
+	},
+	{
+		"name": "fog_of_war_type",
+		"type": "FOG_OF_WAR_TYPE::Enum",
+		"default": "DEFAULT",
+		"doc": "the way removing fog of war works in this biome"
+	},
+	{
+		"name": "gradient_sky_alpha_target_mod",
+		"type": "float",
+		"default": "0.0",
+		"doc": ""
+	},
+	{
+		"name": "rain_target_mod",
+		"type": "float",
+		"default": "0.0",
+		"doc": ""
+	},
+	{
+		"name": "fog_target_mod",
+		"type": "float",
+		"default": "0.0",
+		"doc": ""
+	},
+	{
+		"name": "sunset_alpha_target",
+		"type": "float",
+		"default": "1.0",
+		"doc": "affects sunset gradient amount"
+	},
+	{
+		"name": "bitmap_filename",
+		"type": "std::string",
+		"default": "",
+		"doc": "loads the chunk from this bitmap, the bitmap should be 512x512"
+	},
+	{
+		"name": "wang_template_file",
+		"type": "std::string",
+		"default": "",
+		"doc": "uses this file to create a herringbone wang map"
+	},
+	{
+		"name": "wang_map_width",
+		"type": "int",
+		"default": "256",
+		"doc": "the size of the wang map (range 1..512)"
+	},
+	{
+		"name": "wang_map_height",
+		"type": "int",
+		"default": "256",
+		"doc": "the size of the wang map (range 1..512)"
+	},
+	{
+		"name": "lua_script",
+		"type": "std::string",
+		"default": "",
+		"doc": "default is data/scripts/biomes/NAME.lua"
+	},
+	{
+		"name": "pixel_scene",
+		"type": "bool",
+		"default": "0",
+		"doc": "for 'pixel scene' biomes, this forces the loading before hand"
+	},
+	{
+		"name": "static_tile",
+		"type": "bool",
+		"default": "0",
+		"doc": "if 1, directly blits wang_template_file without wang randomization, kind of like a pixel scene but at the wang tile resolution"
+	},
+	{
+		"name": "static_tile_bg_mask",
+		"type": "std::string",
+		"default": "",
+		"doc": "if set, and static tile is 1, the background_image will use a special shader and this mask to calculate visiblity. should be same size and resolution as 'wang_template_file'"
+	},
+	{
+		"name": "static_tile_bg_mask_threshold",
+		"type": "float",
+		"default": "0.5",
+		"doc": "threshold used in 'sprite_static_tile_bg.frag' shader in conjuction with 'sprite_static_tile_bg_mask' to determine if a background pixel is visible or not"
+	},
+	{
+		"name": "game_enemy_hp_scale",
+		"type": "float",
+		"default": "1.0",
+		"doc": "1.f = default. Will multiply the hp of the camerabounded enemies in the area with hp_scale"
+	},
+	{
+		"name": "game_enemy_attack_speed",
+		"type": "float",
+		"default": "1.0",
+		"doc": "1.f = default. This multiplies AnimalAI's attack_ranged_frames_between in camerabounded enemies"
+	},
+	{
+		"name": "noise_type",
+		"type": "NOISE_TYPE::Enum",
+		"default": "IQ2_SIMPLEX1234",
+		"doc": "the style of the cave noise"
+	},
+	{
+		"name": "mInsideNoiseType",
+		"type": "GENERAL_NOISE::Enum",
+		"default": "SimplexNoise",
+		"doc": "the style of the inside noise"
+	},
+	{
+		"name": "mInsideNoiseFBM",
+		"type": "bool",
+		"default": "1",
+		"doc": "will fbm the mInsideNoise if set true"
+	},
+	{
+		"name": "mInsidePerlinScaleX",
+		"type": "double",
+		"default": "1.0",
+		"doc": "the noise inside the stones..."
+	},
+	{
+		"name": "mInsidePerlinScaleY",
+		"type": "double",
+		"default": "1.0",
+		"doc": "the noise inside the stones..."
+	},
+	{
+		"name": "mInsidePerlinSquared",
+		"type": "bool",
+		"default": "0",
+		"doc": ""
+	},
+	{
+		"name": "mInsidePerlinClamped",
+		"type": "bool",
+		"default": "0",
+		"doc": ""
+	},
+	{
+		"name": "mInsidePerlinScaled",
+		"type": "bool",
+		"default": "0",
+		"doc": ""
+	},
+	{
+		"name": "mInsidePerlinScaleMin",
+		"type": "float",
+		"default": "0.0",
+		"doc": ""
+	},
+	{
+		"name": "mInsidePerlinScaleMax",
+		"type": "float",
+		"default": "0.0",
+		"doc": ""
+	},
+	{
+		"name": "mInsidePerlinForceInside",
+		"type": "bool",
+		"default": "0",
+		"doc": "if set, will multiply the noise_value with the gradient value"
+	},
+	{
+		"name": "mInsidePerlinOffsetBySeed",
+		"type": "bool",
+		"default": "0",
+		"doc": "NOTE( Petri ): 17.8.2023 - if set, will add worldseed as an offset to the noise"
+	},
+	{
+		"name": "mInsidePerlinOffsetX",
+		"type": "double",
+		"default": "0.0",
+		"doc": "NOTE( Petri ): 17.8.2023 - perlin noise offset"
+	},
+	{
+		"name": "mInsidePerlinOffsetY",
+		"type": "double",
+		"default": "0.0",
+		"doc": "NOTE( Petri ): 17.8.2023 - perlin noise offset"
+	},
+	{
+		"name": "mInsideAddValue",
+		"type": "float",
+		"default": "0.0",
+		"doc": "added inside the caves the gradient value"
+	},
+	{
+		"name": "mMultiplierGradient",
+		"type": "float",
+		"default": "1.0",
+		"doc": "how much of the gradient is applied"
+	},
+	{
+		"name": "mMultiplierPerlin",
+		"type": "float",
+		"default": "1.0",
+		"doc": "how much of the inside noise"
+	},
+	{
+		"name": "mMultiplierExtraPerlin",
+		"type": "float",
+		"default": "1.0",
+		"doc": ""
+	},
+	{
+		"name": "mGradientStartY",
+		"type": "float",
+		"default": "-512.0",
+		"doc": ""
+	},
+	{
+		"name": "mGradientEndY",
+		"type": "float",
+		"default": "512.0",
+		"doc": ""
+	},
+	{
+		"name": "mGradientSlopeStartX",
+		"type": "double",
+		"default": "0.0",
+		"doc": "if addNoise = 3, will use this to the ( x - mGradientSlopeStartX ) * mGradientSlopeDelta"
+	},
+	{
+		"name": "mGradientSlopeDelta",
+		"type": "double",
+		"default": "1.0",
+		"doc": "if addNoise = 3, will use this to the ( x - mGradientSlopeStartX ) * mGradientSlopeDelta"
+	},
+	{
+		"name": "mGradientAddNoise",
+		"type": "int",
+		"default": "1",
+		"doc": "fake enum 1=standard noise, 2=fbm noise, 3=slope"
+	},
+	{
+		"name": "mGradientNoiseScale",
+		"type": "double",
+		"default": "0.01",
+		"doc": ""
+	},
+	{
+		"name": "mGradientLowNoise",
+		"type": "float",
+		"default": "-100.0",
+		"doc": ""
+	},
+	{
+		"name": "mGradientHighNoise",
+		"type": "float",
+		"default": "100.0",
+		"doc": ""
+	},
+	{
+		"name": "coarse_map_force_terrain",
+		"type": "bool",
+		"default": "0",
+		"doc": "if 1, is initially marked as 'terrain' in the coarse map used for sky light calculations etc"
+	},
+	{
+		"name": "coarse_map_not_terrain",
+		"type": "bool",
+		"default": "0",
+		"doc": "if 1, is initially never marked as 'terrain' in the coarse map used for sky light calculations etc"
+	},
+	{
+		"name": "coarse_map_cell_count_always_zero",
+		"type": "bool",
+		"default": "0",
+		"doc": "if 1, areas in this biome always have a 64x64 cell count of 0"
+	},
+	{
+		"name": "coarse_map_inject_light",
+		"type": "bool",
+		"default": "0",
+		"doc": ""
+	}
+]

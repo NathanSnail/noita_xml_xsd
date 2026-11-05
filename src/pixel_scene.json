@@ -1,0 +1,68 @@
+[
+	{
+		"name": "pos_x",
+		"type": "int",
+		"default": "0",
+		"doc": "Absolute world x of the scene's top-left corner, in pixels"
+	},
+	{
+		"name": "pos_y",
+		"type": "int",
+		"default": "0",
+		"doc": "Absolute world y of the scene's top-left corner, in pixels"
+	},
+	{
+		"name": "material_filename",
+		"type": "std::string",
+		"default": "",
+		"doc": "Material image (.png or .plz) whose colours become cell materials. May be empty when just_load_an_entity is used"
+	},
+	{
+		"name": "colors_filename",
+		"type": "std::string",
+		"default": "",
+		"doc": "Visual image laid over the materials"
+	},
+	{
+		"name": "background_filename",
+		"type": "std::string",
+		"default": "",
+		"doc": "Image drawn behind the terrain"
+	},
+	{
+		"name": "background_z_index",
+		"type": "int",
+		"default": "50",
+		"doc": "Draw order of background_filename"
+	},
+	{
+		"name": "skip_biome_checks",
+		"type": "bool",
+		"default": "0",
+		"doc": "Place the scene even where the biome does not match"
+	},
+	{
+		"name": "skip_edge_textures",
+		"type": "bool",
+		"default": "0",
+		"doc": "Skip edge-texture generation around the scene"
+	},
+	{
+		"name": "just_load_an_entity",
+		"type": "std::string",
+		"default": "",
+		"doc": "Entity file to spawn at pos_x/pos_y instead of (or as well as) stamping images"
+	},
+	{
+		"name": "clean_area_before",
+		"type": "bool",
+		"default": "0",
+		"doc": "Erase the scene's rectangle before stamping it"
+	},
+	{
+		"name": "DEBUG_RELOAD_ME",
+		"type": "bool",
+		"default": "0",
+		"doc": "Debug flag"
+	}
+]

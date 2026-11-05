@@ -13,6 +13,7 @@
 	</xsd:simpleType>
 	<!-- Configs and Enums -->
 	<xsd:complexType name="ConfigExplosion" />
+	<xsd:complexType name="CosmeticParticleConfig" />
 	<!-- Configs and Enums -->
 	<!--Builtin-->
 	<xsd:simpleType name="CELL_TYPE">
@@ -42,8 +43,8 @@
 					<xsd:attribute name="do_only_vertical_stripe" type="NoitaBool" />
 					<xsd:attribute name="allow_random_rotation" type="NoitaBool" />
 					<xsd:attribute name="filename" type="xsd:string" />
-					<xsd:attribute name="min_angle" type="xsd:integer" />
-					<xsd:attribute name="max_angle" type="xsd:integer" />
+					<xsd:attribute name="min_angle" type="xsd:decimal" />
+					<xsd:attribute name="max_angle" type="xsd:decimal" />
 				</xsd:complexType>
 			</xsd:element>
 		</xsd:choice>
@@ -52,10 +53,10 @@
 	<!-- Material Graphics Edge Type -->
 	<xsd:complexType name="MaterialGraphicsEdge" mixed="true">
 		<xsd:sequence>
-			<xsd:element name="EdgeGraphics">
+			<xsd:element name="EdgeGraphics" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType mixed="true">
 					<xsd:sequence>
-						<xsd:element name="Images" type="MaterialGraphicsEdgeImages" />
+						<xsd:element name="Images" type="MaterialGraphicsEdgeImages" minOccurs="0" />
 					</xsd:sequence>
 					<xsd:attribute name="color" type="Hex8" />
 					<xsd:attribute name="overwrite" type="NoitaBool" />
@@ -63,8 +64,10 @@
 					<xsd:attribute name="require_same_material" type="NoitaBool" />
 					<xsd:attribute name="require_same_material_type" type="NoitaBool" />
 					<!-- enum? -->
-					<xsd:attribute name="type" type="xsd:string" />
-					<xsd:attribute name="z" type="xsd:integer" />
+					<xsd:attribute name="type">
+						<xsd:simpleType><xsd:restriction base="xsd:string"><xsd:enumeration value="COLOR_EDGE_PIXELS" /><xsd:enumeration value="EVERYWHERE" /><xsd:enumeration value="CARDINAL_DIRECTIONS" /><xsd:enumeration value="NORMAL_BASED" /></xsd:restriction></xsd:simpleType>
+					</xsd:attribute>
+					<xsd:attribute name="z" type="xsd:decimal" />
 				</xsd:complexType>
 			</xsd:element>
 		</xsd:sequence>
@@ -73,7 +76,7 @@
 	<!-- Material Graphics Type -->
 	<xsd:complexType name="MaterialGraphics" mixed="true">
 		<xsd:choice>
-			<xsd:element name="Edge" type="MaterialGraphicsEdge" minOccurs="0" />
+			<xsd:element name="Edge" type="MaterialGraphicsEdge" minOccurs="0" maxOccurs="unbounded" />
 		</xsd:choice>
 		<xsd:attribute name="color" type="Hex8" default="00000000">
 			<xsd:annotation>
@@ -81,7 +84,7 @@
 			</xsd:annotation>
 		</xsd:attribute>
 		<!-- enum? -->
-		<xsd:attribute name="fire_colors_index" type="xsd:integer" default="0">
+		<xsd:attribute name="fire_colors_index" type="xsd:unsignedInt" default="0">
 			<xsd:annotation>
 				<xsd:documentation />
 			</xsd:annotation>
@@ -166,15 +169,15 @@
 
 	<!-- Material Status Effect Type -->
 	<xsd:complexType name="MaterialStatusEffects">
-		<xsd:choice minOccurs="1" maxOccurs="unbounded">
+		<xsd:choice minOccurs="0" maxOccurs="unbounded">
 			<xsd:element name="Ingestion">
 				<xsd:complexType>
 					<xsd:choice>
-						<xsd:element name="StatusEffect" minOccurs="1"
+						<xsd:element name="StatusEffect" minOccurs="0"
 							maxOccurs="unbounded">
 							<xsd:complexType>
 								<xsd:attribute name="type" type="xsd:string" />
-								<xsd:attribute name="amount" type="xsd:decimal" />
+								<xsd:attribute name="amount" type="xsd:decimal" default="1" />
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:choice>
@@ -183,40 +186,17 @@
 			<xsd:element name="Stains">
 				<xsd:complexType>
 					<xsd:choice>
-						<xsd:element name="StatusEffect" minOccurs="1"
+						<xsd:element name="StatusEffect" minOccurs="0"
 							maxOccurs="unbounded">
 							<xsd:complexType>
 								<xsd:attribute name="type" type="xsd:string" />
+								<xsd:attribute name="amount" type="xsd:decimal" default="1" />
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:choice>
 				</xsd:complexType>
 			</xsd:element>
 		</xsd:choice>
-	</xsd:complexType>
-
-	<!-- Material Particle Effect Type -->
-	<xsd:complexType name="MaterialParticleEffect" mixed="true">
-		<xsd:attribute name="vel.y" type="xsd:decimal" />
-		<xsd:attribute name="vel_random.min_x" type="xsd:decimal" />
-		<xsd:attribute name="vel_random.max_x" type="xsd:decimal" />
-		<xsd:attribute name="vel_random.min_y" type="xsd:decimal" />
-		<xsd:attribute name="vel_random.max_y" type="xsd:decimal" />
-		<xsd:attribute name="lifetime.min" type="xsd:decimal" />
-		<xsd:attribute name="lifetime.max" type="xsd:decimal" />
-		<xsd:attribute name="gravity.x" type="xsd:decimal" />
-		<xsd:attribute name="gravity.y" type="xsd:decimal" />
-		<xsd:attribute name="render_on_grid" type="NoitaBool" />
-		<xsd:attribute name="particle_single_width" type="NoitaBool" />
-		<xsd:attribute name="draw_as_long" type="NoitaBool" />
-		<xsd:attribute name="airflow_force" type="xsd:decimal" />
-		<xsd:attribute name="airflow_scale" type="xsd:decimal" />
-		<xsd:attribute name="friction" type="xsd:decimal" />
-		<xsd:attribute name="probability" type="xsd:decimal" />
-		<xsd:attribute name="count.min" type="xsd:nonNegativeInteger" />
-		<xsd:attribute name="count.max" type="xsd:nonNegativeInteger" />
-		<!-- ? -->
-		<xsd:attribute name="m_material_id" type="xsd:integer" />
 	</xsd:complexType>
 
 	<!-- Material Type -->
@@ -228,7 +208,7 @@
 			<xsd:element name="Graphics" type="MaterialGraphics" minOccurs="0" maxOccurs="1" />
 			<xsd:element name="StatusEffects" type="MaterialStatusEffects" minOccurs="0"
 				maxOccurs="1" />
-			<xsd:element name="ParticleEffect" type="MaterialParticleEffect" minOccurs="0"
+			<xsd:element name="ParticleEffect" type="CosmeticParticleConfig" minOccurs="0"
 				maxOccurs="1" />
 			<xsd:element name="ExplosionConfig" type="ConfigExplosion" minOccurs="0"
 				maxOccurs="1" />

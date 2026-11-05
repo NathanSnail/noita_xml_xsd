@@ -1,0 +1,56 @@
+[
+	{
+		"name": "image_file",
+		"type": "std::string",
+		"default": "",
+		"doc": "path to image file that's going to be blitted"
+	},
+	{
+		"name": "count_min",
+		"type": "int",
+		"default": "50",
+		"doc": " (range 0..200)"
+	},
+	{
+		"name": "count_max",
+		"type": "int",
+		"default": "100",
+		"doc": " (range 0..200)"
+	},
+	{
+		"name": "aabb_min_x",
+		"type": "int",
+		"default": "50",
+		"doc": " (range 0..200)"
+	},
+	{
+		"name": "aabb_min_y",
+		"type": "int",
+		"default": "100",
+		"doc": " (range 0..200)"
+	},
+	{
+		"name": "aabb_max_x",
+		"type": "int",
+		"default": "50",
+		"doc": " (range 0..200)"
+	},
+	{
+		"name": "aabb_max_y",
+		"type": "int",
+		"default": "100",
+		"doc": " (range 0..200)"
+	},
+	{
+		"name": "strength_min",
+		"type": "float",
+		"default": "1.5",
+		"doc": ""
+	},
+	{
+		"name": "strength_max",
+		"type": "float",
+		"default": "1.5",
+		"doc": ""
+	}
+]

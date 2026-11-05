@@ -1,0 +1,38 @@
+[
+	{
+		"name": "_enabled",
+		"type": "bool",
+		"default": "1",
+		"doc": "Generic component flag accepted on biome components; its effect here was not traced"
+	},
+	{
+		"name": "count_min",
+		"type": "int",
+		"default": "0",
+		"doc": "Minimum number of stamps"
+	},
+	{
+		"name": "count_max",
+		"type": "int",
+		"default": "0",
+		"doc": "Maximum number of stamps"
+	},
+	{
+		"name": "seed",
+		"type": "int",
+		"default": "1",
+		"doc": "Random seed for placement"
+	},
+	{
+		"name": "material",
+		"type": "std::string",
+		"default": "bone",
+		"doc": "Material the image is stamped in"
+	},
+	{
+		"name": "image_file",
+		"type": "std::string",
+		"default": "",
+		"doc": "Image stamped into the terrain"
+	}
+]

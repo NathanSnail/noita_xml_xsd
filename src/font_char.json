@@ -1,0 +1,32 @@
+[
+	{
+		"name": "id",
+		"type": "int",
+		"default": "0",
+		"doc": "Unicode code point of the character. A later QuadChar or Char with the same id replaces this one"
+	},
+	{
+		"name": "rect_x",
+		"type": "float",
+		"default": "0",
+		"doc": "Left edge of the glyph in the Texture, in pixels"
+	},
+	{
+		"name": "rect_y",
+		"type": "float",
+		"default": "0",
+		"doc": "Top edge of the glyph in the Texture, in pixels"
+	},
+	{
+		"name": "rect_w",
+		"type": "float",
+		"default": "0",
+		"doc": "Width of the glyph in the Texture, in pixels. Also used as the advance (width) for a new glyph"
+	},
+	{
+		"name": "rect_h",
+		"type": "float",
+		"default": "0",
+		"doc": "Height of the glyph in the Texture, in pixels"
+	}
+]

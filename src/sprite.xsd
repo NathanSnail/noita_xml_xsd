@@ -1,6 +1,6 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-	<!--Sprite, might need some
-	description on hover later, also some defaults are unknown-->
+	<!-- Sprite files. Recovered from the game's sprite reader: every attribute is optional (read only
+	if present) and defaults are the constructor values. Attributes not listed here are ignored. -->
 	<!--Builtin-->
 	<xsd:simpleType name="NoitaBool">
 		<xsd:restriction base="xsd:string">
@@ -9,70 +9,112 @@
 		</xsd:restriction>
 	</xsd:simpleType>
 	<!--Builtin-->
-	<xsd:element name="Sprite">
-		<xsd:complexType mixed="true">
-			<xsd:choice maxOccurs="unbounded" minOccurs="0">
-				<xsd:element name="RectAnimation" minOccurs="0" maxOccurs="unbounded">
-					<xsd:complexType mixed="true">
-						<xsd:choice>
-							<xsd:element name="Event" minOccurs="0"
-								maxOccurs="unbounded">
-								<xsd:complexType mixed="true">
-									<xsd:attribute name="name" type="xsd:string"
-										use="required" />
-									<xsd:attribute name="frame"
-										type="xsd:nonNegativeInteger"
-										use="required" />
-									<xsd:attribute name="max_distance"
-										type="xsd:positiveInteger" />
-									<xsd:attribute name="probability"
-										type="xsd:decimal" />
-									<xsd:attribute name="on_finished"
-										type="NoitaBool" />
-									<xsd:attribute name="check_physics_material"
-										type="NoitaBool" />
-								</xsd:complexType>
-							</xsd:element>
-						</xsd:choice>
-						<xsd:attribute name="name" type="xsd:string" use="required" />
-						<xsd:attribute name="frame_count" type="xsd:positiveInteger"
-							use="required" />
-						<xsd:attribute name="frames_per_row" type="xsd:positiveInteger"
-							use="required" />
-						<xsd:attribute name="frame_width" type="xsd:positiveInteger"
-							use="required" />
-						<xsd:attribute name="frame_height" type="xsd:positiveInteger"
-							use="required" />
-						<xsd:attribute name="frame_wait" type="xsd:decimal" use="required" />
-						<xsd:attribute name="pos_x" type="xsd:integer" default="0" />
-						<xsd:attribute name="pos_y" type="xsd:integer" default="0" />
-						<xsd:attribute name="offset_x" type="xsd:decimal" default="0" />
-						<xsd:attribute name="offset_y" type="xsd:decimal" default="0" />
-						<xsd:attribute name="shrink_by_one_pixel" type="NoitaBool" />
-						<xsd:attribute name="has_offset" type="NoitaBool" default="1" />
-						<xsd:attribute name="loop" type="NoitaBool" default="0" />
-						<xsd:attribute name="next_animation" type="xsd:string" default="" />
-					</xsd:complexType>
-				</xsd:element>
-				<xsd:element name="Hotspot" minOccurs="0" maxOccurs="unbounded">
-					<xsd:complexType mixed="true">
-						<xsd:attribute name="name" type="xsd:string" use="required" />
-						<xsd:attribute name="color" type="xsd:hexBinary" use="required" />
-					</xsd:complexType>
-				</xsd:element>
-			</xsd:choice>
-			<xsd:attribute name="filename" type="xsd:string" use="required" />
-			<xsd:attribute name="hotspots_filename" type="xsd:string" />
-			<xsd:attribute name="offset_x" type="xsd:decimal" default="0" />
-			<xsd:attribute name="offset_y" type="xsd:decimal" default="0" />
-			<xsd:attribute name="position_x" type="xsd:decimal" default="0" />
-			<xsd:attribute name="position_y" type="xsd:decimal" default="0" />
-			<xsd:attribute name="default_animation" type="xsd:string" default="default" />
-			<xsd:attribute name="color_a" type="xsd:decimal" default="1" />
-			<xsd:attribute name="color_b" type="xsd:decimal" default="1" />
-			<xsd:attribute name="color_g" type="xsd:decimal" default="1" />
-			<xsd:attribute name="color_r" type="xsd:decimal" default="1" />
-		</xsd:complexType>
+	<xsd:simpleType name="SpriteHexColor">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="(0[xX])?[0-9A-Fa-f]{1,8}" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="SpriteFile" mixed="true">
+		<xsd:choice maxOccurs="unbounded" minOccurs="0">
+			<xsd:element name="RectAnimation">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[One animation: a strip of frames cut from `filename`.]]></xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType mixed="true">
+					<xsd:choice maxOccurs="unbounded" minOccurs="0">
+						<xsd:element name="Event">
+							<xsd:complexType mixed="true">
+								<xsd:attribute name="name" type="xsd:string" default="">
+									<xsd:annotation><xsd:documentation><![CDATA[Event name sent when the frame is reached.]]></xsd:documentation></xsd:annotation>
+								</xsd:attribute>
+								<xsd:attribute name="frame" type="xsd:int" default="0">
+									<xsd:annotation><xsd:documentation><![CDATA[Frame index that fires the event.]]></xsd:documentation></xsd:annotation>
+								</xsd:attribute>
+								<xsd:attribute name="probability" type="xsd:decimal" default="1" />
+								<xsd:attribute name="max_distance" type="xsd:decimal" default="500" />
+								<xsd:attribute name="on_finished" type="NoitaBool" default="0" />
+								<xsd:attribute name="check_physics_material" type="NoitaBool" default="0" />
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="ChildAnimations">
+							<xsd:annotation>
+								<xsd:documentation><![CDATA[Draws a child sprite (one of the nested `<Sprite>` elements, by `sprite_name`) during this animation.]]></xsd:documentation>
+							</xsd:annotation>
+							<xsd:complexType mixed="true">
+								<xsd:attribute name="frame" type="xsd:int" default="0" />
+								<xsd:attribute name="sprite_name" type="xsd:string" default="unknown" />
+								<xsd:attribute name="position_x" type="xsd:decimal" default="0" />
+								<xsd:attribute name="position_y" type="xsd:decimal" default="0" />
+								<xsd:attribute name="rotation" type="xsd:decimal" default="0" />
+								<xsd:attribute name="alpha" type="xsd:decimal" default="1" />
+								<xsd:attribute name="scale_x" type="xsd:decimal" default="1" />
+								<xsd:attribute name="scale_y" type="xsd:decimal" default="1" />
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:choice>
+					<xsd:attribute name="name" type="xsd:string" default="unknown" />
+					<xsd:attribute name="frame_count" type="xsd:int" default="0" />
+					<xsd:attribute name="frame_width" type="xsd:int" default="0" />
+					<xsd:attribute name="frame_height" type="xsd:int" default="0" />
+					<xsd:attribute name="frames_per_row" type="xsd:int" default="9999">
+						<xsd:annotation><xsd:documentation><![CDATA[Frames per row before wrapping to the next. The default 9999 means "one row".]]></xsd:documentation></xsd:annotation>
+					</xsd:attribute>
+					<xsd:attribute name="shrink_by_one_pixel" type="NoitaBool" default="0" />
+					<xsd:attribute name="pos_x" type="xsd:int" default="0">
+						<xsd:annotation><xsd:documentation><![CDATA[Pixel x of the first frame in the image.]]></xsd:documentation></xsd:annotation>
+					</xsd:attribute>
+					<xsd:attribute name="pos_y" type="xsd:int" default="0">
+						<xsd:annotation><xsd:documentation><![CDATA[Pixel y of the first frame in the image.]]></xsd:documentation></xsd:annotation>
+					</xsd:attribute>
+					<xsd:attribute name="frame_wait" type="xsd:decimal" default="0">
+						<xsd:annotation><xsd:documentation><![CDATA[Seconds per frame. Plain number: a unit like `0.05s` is not part of the format.]]></xsd:documentation></xsd:annotation>
+					</xsd:attribute>
+					<xsd:attribute name="has_offset" type="NoitaBool" default="0">
+						<xsd:annotation><xsd:documentation><![CDATA[If 1, this animation uses its own offset_x/offset_y.]]></xsd:documentation></xsd:annotation>
+					</xsd:attribute>
+					<xsd:attribute name="offset_x" type="xsd:decimal" default="0" />
+					<xsd:attribute name="offset_y" type="xsd:decimal" default="0" />
+					<xsd:attribute name="loop" type="NoitaBool" default="1">
+						<xsd:annotation><xsd:documentation><![CDATA[Defaults to **1**: an animation loops unless it says `loop="0"`.]]></xsd:documentation></xsd:annotation>
+					</xsd:attribute>
+					<xsd:attribute name="next_animation" type="xsd:string" default="">
+						<xsd:annotation><xsd:documentation><![CDATA[Animation to switch to when this one ends.]]></xsd:documentation></xsd:annotation>
+					</xsd:attribute>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="Sprite" type="SpriteFile">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[Child sprite, referenced by `name` from `<ChildAnimations sprite_name>`.]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Hotspot">
+				<xsd:complexType mixed="true">
+					<xsd:attribute name="name" type="xsd:string" default="" />
+					<xsd:attribute name="color" type="SpriteHexColor">
+						<xsd:annotation><xsd:documentation><![CDATA[Colour key in `hotspots_filename`, read as hex (1-8 digits, so `ff0000` and `000000ff` are both valid).]]></xsd:documentation></xsd:annotation>
+					</xsd:attribute>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+		<xsd:attribute name="name" type="xsd:string" default="" />
+		<xsd:attribute name="filename" type="xsd:string" default="">
+			<xsd:annotation><xsd:documentation><![CDATA[The image the frames are cut from.]]></xsd:documentation></xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="hotspots_filename" type="xsd:string" default="" />
+		<xsd:attribute name="offset_x" type="xsd:decimal" default="0" />
+		<xsd:attribute name="offset_y" type="xsd:decimal" default="0" />
+		<xsd:attribute name="scale_x" type="xsd:decimal" default="1" />
+		<xsd:attribute name="scale_y" type="xsd:decimal" default="1" />
+		<xsd:attribute name="position_x" type="xsd:decimal" default="0" />
+		<xsd:attribute name="position_y" type="xsd:decimal" default="0" />
+		<xsd:attribute name="angle" type="xsd:decimal" default="0" />
+		<xsd:attribute name="default_animation" type="xsd:string" default="" />
+		<xsd:attribute name="color_r" type="xsd:decimal" default="1" />
+		<xsd:attribute name="color_g" type="xsd:decimal" default="1" />
+		<xsd:attribute name="color_b" type="xsd:decimal" default="1" />
+		<xsd:attribute name="color_a" type="xsd:decimal" default="1" />
+	</xsd:complexType>
+	<xsd:element name="Sprite" type="SpriteFile">
 		<xsd:unique name="UniqueRectAnimationName">
 			<xsd:selector xpath="RectAnimation" />
 			<xsd:field xpath="@name" />

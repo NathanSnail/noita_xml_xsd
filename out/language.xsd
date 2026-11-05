@@ -1,0 +1,82 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<!--Builtin-->
+	<xsd:simpleType name="NoitaBool">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="0" />
+			<xsd:enumeration value="1" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!--Builtin-->
+	<xsd:element name="Language">
+		<xsd:complexType mixed="true">
+			<!-- Language Docs --><xsd:annotation><xsd:documentation><![CDATA[<br>```cpp<br>class Language {<br>&emsp;&emsp;&emsp;&emsp;std::string key = ""; //  Language id, e.g. fi-es. The shipped data/translations/*.xml omit it because the game already knows their id; a translation mod sets it<br>&emsp;&emsp;&emsp;&emsp;std::string name = ""; //  Name shown in the language list<br>&emsp;&emsp;&emsp;&emsp;std::string font_default = ""; //  Font file (.xml or .bin) for general UI text<br>&emsp;&emsp;&emsp;&emsp;std::string font_inventory_title = ""; //  Font file for inventory titles<br>&emsp;&emsp;&emsp;&emsp;std::string font_important_message_title = ""; //  Font file for large on-screen message titles<br>&emsp;&emsp;&emsp;&emsp;std::string font_world_space_message = ""; //  Font file for text drawn in the world<br>&emsp;&emsp;&emsp;&emsp;bool fonts_utf8 = 0; //  UTF-8 font flag. Every shipped language sets 1<br>&emsp;&emsp;&emsp;&emsp;bool fonts_pixel_font = 0; //  Pixel-font flag. Shipped Latin/Cyrillic languages set 1; CJK languages using the generated Noto fonts omit it<br>&emsp;&emsp;&emsp;&emsp;float fonts_dpi = 1; //  Font DPI value. No shipped file sets it<br>&emsp;&emsp;&emsp;&emsp;float ui_wand_info_offset1 = 0; //  Per-language UI offset in the wand info box (first value)<br>&emsp;&emsp;&emsp;&emsp;float ui_wand_info_offset2 = 0; //  Per-language UI offset in the wand info box (second value)<br>&emsp;&emsp;&emsp;&emsp;float ui_action_info_offset2 = 0; //  Per-language UI offset in the spell info box<br>&emsp;&emsp;&emsp;&emsp;float ui_configurecontrols_offset2 = 0; //  Per-language UI offset in the Configure Controls screen<br>};<br>```<br>]]></xsd:documentation></xsd:annotation><!-- Language Docs -->
+			<!-- Language Attributes -->
+		<xsd:attribute name="key" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string key = ""; //  Language id, e.g. fi-es. The shipped data/translations/*.xml omit it because the game already knows their id; a translation mod sets it<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="name" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string name = ""; //  Name shown in the language list<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="font_default" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string font_default = ""; //  Font file (.xml or .bin) for general UI text<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="font_inventory_title" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string font_inventory_title = ""; //  Font file for inventory titles<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="font_important_message_title" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string font_important_message_title = ""; //  Font file for large on-screen message titles<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="font_world_space_message" type="xsd:string" default="">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>std::string font_world_space_message = ""; //  Font file for text drawn in the world<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="fonts_utf8" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool fonts_utf8 = 0; //  UTF-8 font flag. Every shipped language sets 1<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="fonts_pixel_font" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool fonts_pixel_font = 0; //  Pixel-font flag. Shipped Latin/Cyrillic languages set 1; CJK languages using the generated Noto fonts omit it<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="fonts_dpi" type="xsd:decimal" default="1">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float fonts_dpi = 1; //  Font DPI value. No shipped file sets it<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="ui_wand_info_offset1" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float ui_wand_info_offset1 = 0; //  Per-language UI offset in the wand info box (first value)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="ui_wand_info_offset2" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float ui_wand_info_offset2 = 0; //  Per-language UI offset in the wand info box (second value)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="ui_action_info_offset2" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float ui_action_info_offset2 = 0; //  Per-language UI offset in the spell info box<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="ui_configurecontrols_offset2" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float ui_configurecontrols_offset2 = 0; //  Per-language UI offset in the Configure Controls screen<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+<!-- Language Attributes -->
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
