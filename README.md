@@ -1,6 +1,6 @@
 # Noita XML XSD
 Contains xsd definitions for autocomplete and type checking in xml files for Noita.
-Currently supports entities, sprites, materials, fonts, biomes, pixel scenes, languages. The end goal is documentation for
+Currently supports entities, sprites, materials, fonts, biomes, pixel scenes, languages, weather config. The end goal is documentation for
 100% of the xml schemas Noita supports.
 
 If you wish to make this apply to specific files, put the following code at the top of the file:

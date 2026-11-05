@@ -1,0 +1,97 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<!--Builtin-->
+	<xsd:simpleType name="NoitaBool">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="0" />
+			<xsd:enumeration value="1" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!--Builtin-->
+	<xsd:element name="WeatherConfig">
+		<xsd:complexType mixed="true">
+			<!-- WeatherConfig Docs --><xsd:annotation><xsd:documentation><![CDATA[<br>```cpp<br>class ConfigParallaxBackground {<br>&emsp;&emsp;&emsp;&emsp;bool debug = 0; //  Debug flag<br>&emsp;&emsp;&emsp;&emsp;bool init_randomize = 1; //  Randomize the initial weather state<br>&emsp;&emsp;&emsp;&emsp;float storm_clouds_pos_y_0 = 130; //  Storm cloud layer y position (first of a pair)<br>&emsp;&emsp;&emsp;&emsp;float storm_clouds_pos_y_1 = 40; //  Storm cloud layer y position (second of the pair)<br>&emsp;&emsp;&emsp;&emsp;float storm_alpha_0 = 0; //  Storm cloud alpha (first of a pair)<br>&emsp;&emsp;&emsp;&emsp;float storm_alpha_1 = 0.6; //  Storm cloud alpha (second of the pair)<br>&emsp;&emsp;&emsp;&emsp;float parallax_offset_y = 50; //  Vertical offset of the whole parallax background<br>&emsp;&emsp;&emsp;&emsp;float mountains_01_offset_y = 0; //  Vertical offset of mountain layer 1<br>&emsp;&emsp;&emsp;&emsp;float mountains_02_offset_y = 0; //  Vertical offset of mountain layer 2<br>&emsp;&emsp;&emsp;&emsp;float clouds_01_offset_y_min = 0; //  Cloud layer 1 vertical range, minimum<br>&emsp;&emsp;&emsp;&emsp;float clouds_01_offset_y_max = 0; //  Cloud layer 1 vertical range, maximum<br>&emsp;&emsp;&emsp;&emsp;float clouds_02_offset_y_min = 0; //  Cloud layer 2 vertical range, minimum<br>&emsp;&emsp;&emsp;&emsp;float clouds_02_offset_y_max = 0; //  Cloud layer 2 vertical range, maximum<br>&emsp;&emsp;&emsp;&emsp;float gradient_sky_alpha = 0; //  Alpha of the sky gradient<br>&emsp;&emsp;&emsp;&emsp;float sunset_alpha = 1; //  Alpha of the sunset line<br>&emsp;&emsp;&emsp;&emsp;float cloud_coeff = 0.001667; //  Cloud coefficient (compiled default 1/600)<br>};<br>```<br>]]></xsd:documentation></xsd:annotation><!-- WeatherConfig Docs -->
+			<!-- WeatherConfig Attributes -->
+		<xsd:attribute name="debug" type="NoitaBool" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool debug = 0; //  Debug flag<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="init_randomize" type="NoitaBool" default="1">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>bool init_randomize = 1; //  Randomize the initial weather state<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="storm_clouds_pos_y_0" type="xsd:decimal" default="130">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float storm_clouds_pos_y_0 = 130; //  Storm cloud layer y position (first of a pair)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="storm_clouds_pos_y_1" type="xsd:decimal" default="40">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float storm_clouds_pos_y_1 = 40; //  Storm cloud layer y position (second of the pair)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="storm_alpha_0" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float storm_alpha_0 = 0; //  Storm cloud alpha (first of a pair)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="storm_alpha_1" type="xsd:decimal" default="0.6">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float storm_alpha_1 = 0.6; //  Storm cloud alpha (second of the pair)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="parallax_offset_y" type="xsd:decimal" default="50">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float parallax_offset_y = 50; //  Vertical offset of the whole parallax background<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mountains_01_offset_y" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float mountains_01_offset_y = 0; //  Vertical offset of mountain layer 1<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="mountains_02_offset_y" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float mountains_02_offset_y = 0; //  Vertical offset of mountain layer 2<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="clouds_01_offset_y_min" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float clouds_01_offset_y_min = 0; //  Cloud layer 1 vertical range, minimum<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="clouds_01_offset_y_max" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float clouds_01_offset_y_max = 0; //  Cloud layer 1 vertical range, maximum<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="clouds_02_offset_y_min" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float clouds_02_offset_y_min = 0; //  Cloud layer 2 vertical range, minimum<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="clouds_02_offset_y_max" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float clouds_02_offset_y_max = 0; //  Cloud layer 2 vertical range, maximum<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="gradient_sky_alpha" type="xsd:decimal" default="0">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float gradient_sky_alpha = 0; //  Alpha of the sky gradient<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="sunset_alpha" type="xsd:decimal" default="1">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float sunset_alpha = 1; //  Alpha of the sunset line<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="cloud_coeff" type="xsd:decimal" default="0.001667">
+			<xsd:annotation>
+				<xsd:documentation><![CDATA[```cpp<br>float cloud_coeff = 0.001667; //  Cloud coefficient (compiled default 1/600)<br>```]]></xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+<!-- WeatherConfig Attributes -->
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

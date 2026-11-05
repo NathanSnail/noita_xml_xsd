@@ -1,0 +1,18 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<!--Builtin-->
+	<xsd:simpleType name="NoitaBool">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="0" />
+			<xsd:enumeration value="1" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!--Builtin-->
+	<xsd:element name="WeatherConfig">
+		<xsd:complexType mixed="true">
+			<!-- WeatherConfig Docs -->
+			<!-- WeatherConfig Docs -->
+			<!-- WeatherConfig Attributes -->
+			<!-- WeatherConfig Attributes -->
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

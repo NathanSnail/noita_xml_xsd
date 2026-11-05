@@ -718,6 +718,12 @@ apply_replacements(
     {"Language Attributes": language_replacements.attributes, "Language Docs": language_replacements.docs},
 )
 
+weather_replacements = render_json("weather_config", "ConfigParallaxBackground")
+apply_replacements(
+    "weather_config",
+    {"WeatherConfig Attributes": weather_replacements.attributes, "WeatherConfig Docs": weather_replacements.docs},
+)
+
 magic_replacements = render_json("magic_numbers", "MagicNumbers")
 apply_replacements(
     "magic_numbers",

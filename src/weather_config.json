@@ -1,0 +1,98 @@
+[
+	{
+		"name": "debug",
+		"type": "bool",
+		"default": "0",
+		"doc": "Debug flag"
+	},
+	{
+		"name": "init_randomize",
+		"type": "bool",
+		"default": "1",
+		"doc": "Randomize the initial weather state"
+	},
+	{
+		"name": "storm_clouds_pos_y_0",
+		"type": "float",
+		"default": "130",
+		"doc": "Storm cloud layer y position (first of a pair)"
+	},
+	{
+		"name": "storm_clouds_pos_y_1",
+		"type": "float",
+		"default": "40",
+		"doc": "Storm cloud layer y position (second of the pair)"
+	},
+	{
+		"name": "storm_alpha_0",
+		"type": "float",
+		"default": "0",
+		"doc": "Storm cloud alpha (first of a pair)"
+	},
+	{
+		"name": "storm_alpha_1",
+		"type": "float",
+		"default": "0.6",
+		"doc": "Storm cloud alpha (second of the pair)"
+	},
+	{
+		"name": "parallax_offset_y",
+		"type": "float",
+		"default": "50",
+		"doc": "Vertical offset of the whole parallax background"
+	},
+	{
+		"name": "mountains_01_offset_y",
+		"type": "float",
+		"default": "0",
+		"doc": "Vertical offset of mountain layer 1"
+	},
+	{
+		"name": "mountains_02_offset_y",
+		"type": "float",
+		"default": "0",
+		"doc": "Vertical offset of mountain layer 2"
+	},
+	{
+		"name": "clouds_01_offset_y_min",
+		"type": "float",
+		"default": "0",
+		"doc": "Cloud layer 1 vertical range, minimum"
+	},
+	{
+		"name": "clouds_01_offset_y_max",
+		"type": "float",
+		"default": "0",
+		"doc": "Cloud layer 1 vertical range, maximum"
+	},
+	{
+		"name": "clouds_02_offset_y_min",
+		"type": "float",
+		"default": "0",
+		"doc": "Cloud layer 2 vertical range, minimum"
+	},
+	{
+		"name": "clouds_02_offset_y_max",
+		"type": "float",
+		"default": "0",
+		"doc": "Cloud layer 2 vertical range, maximum"
+	},
+	{
+		"name": "gradient_sky_alpha",
+		"type": "float",
+		"default": "0",
+		"doc": "Alpha of the sky gradient"
+	},
+	{
+		"name": "sunset_alpha",
+		"type": "float",
+		"default": "1",
+		"doc": "Alpha of the sunset line"
+	},
+	{
+		"name": "cloud_coeff",
+		"type": "float",
+		"default": "0.001667",
+		"doc": "Cloud coefficient (compiled default 1/600)"
+	}
+]
